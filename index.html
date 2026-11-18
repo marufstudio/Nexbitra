@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#6D28D9">
+  <title>Nexbitra — Virtual Mining Platform</title>
+  <style>
+    :root {
+      --purple-900: #2E1065;
+      --purple-800: #4C1D95;
+      --purple-700: #6D28D9;
+      --purple-600: #7C3AED;
+      --neon-purple: #A855F7;
+      --neon-soft: #C084FC;
+      --navy-950: #111322;
+      --navy-900: #1E2235;
+      --navy-800: #262A44;
+      --bg-page: #F3F4FA;
+      --bg-card: #FFFFFF;
+      --text-main: #181826;
+      --text-muted: #646982;
+      --border-light: #E8E9F3;
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --shadow-card: 0 8px 24px rgba(26, 29, 51, 0.06);
+      --shadow-nav: 0 -4px 20px rgba(26, 29, 51, 0.08);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        background: linear-gradient(160deg, #ECE9F9 0%, #E2E6F6 100%);
+      }
+    }
+
+    /* Hidden CSS-only page router radios (works with zero JS; easy to hook into app.js later) */
+    .page-radio {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--bg-page);
+      padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .app-shell {
+        max-width: 560px;
+        box-shadow: 0 0 42px rgba(46, 16, 101, 0.1);
+      }
+    }
+
+    /* Page visibility rules (Pure CSS routing) */
+    .page-section {
+      display: none;
+      animation: fadeSlide 0.2s ease;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #route-home:checked ~ .app-shell #page-home,
+    #route-task:checked ~ .app-shell #page-task,
+    #route-team:checked ~ .app-shell #page-team,
+    #route-vip:checked ~ .app-shell #page-vip,
+    #route-me:checked ~ .app-shell #page-me,
+    #route-wallet:checked ~ .app-shell #page-wallet,
+    #route-records:checked ~ .app-shell #page-records,
+    #route-password:checked ~ .app-shell #page-password,
+    #route-support:checked ~ .app-shell #page-support {
+      display: block;
+    }
+
+    /* Active Bottom Nav Highlighting */
+    #route-home:checked ~ .bottom-nav label[for="route-home"],
+    #route-task:checked ~ .bottom-nav label[for="route-task"],
+    #route-team:checked ~ .bottom-nav label[for="route-team"],
+    #route-vip:checked ~ .bottom-nav label[for="route-vip"],
+    #route-me:checked ~ .bottom-nav label[for="route-me"],
+    #route-wallet:checked ~ .bottom-nav label[for="route-me"],
+    #route-records:checked ~ .bottom-nav label[for="route-me"],
+    #route-password:checked ~ .bottom-nav label[for="route-me"],
+    #route-support:checked ~ .bottom-nav label[for="route-me"] {
+      color: var(--purple-600);
+    }
+
+    /* Hero / Profile Gradient Header */
+    .hero-header {
+      background: linear-gradient(135deg, #4C1D95 0%, #6D28D9 52%, #7C3AED 100%);
+      color: #FFFFFF;
+      padding: 16px 18px 68px;
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+    }
+
+    .hero-header.compact {
+      padding-bottom: 24px;
+      border-bottom-left-radius: 22px;
+      border-bottom-right-radius: 22px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .icon-circle-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.18s ease;
+    }
+
+    .icon-circle-btn:hover {
+      background: rgba(255, 255, 255, 0.26);
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #F43F5E;
+      border: 1.5px solid #6D28D9;
+    }
+
+    .brand-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: var(--purple-700);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(17, 19, 34, 0.22);
+    }
+
+    .brand-name {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #FFFFFF;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .welcome-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 2px;
+    }
+
+    .welcome-user {
+      font-size: 18px;
+      font-weight: 700;
+      color: #FFFFFF;
+      word-break: break-all;
+    }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 13px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, #FDE047 0%, #F59E0B 100%);
+      color: #2E1065;
+      font-weight: 800;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+      white-space: nowrap;
+    }
+
+    /* Main Page Container */
+    .page-content {
+      padding: 0 16px 20px;
+    }
+
+    .overlap-card {
+      margin-top: -48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Dark Navy Balance Card (matches screenshot) */
+    .balance-card-dark {
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 100%);
+      color: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 20px 16px;
+      box-shadow: 0 12px 28px rgba(17, 19, 34, 0.22);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      border: 1px solid rgba(168, 85, 247, 0.24);
+    }
+
+    .balance-col {
+      text-align: center;
+    }
+
+    .balance-col:first-child {
+      border-right: 1px solid rgba(255, 255, 255, 0.12);
+      padding-right: 10px;
+    }
+
+    .balance-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.78);
+      margin-bottom: 6px;
+    }
+
+    .balance-value {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: #FFFFFF;
+    }
+
+    .balance-sub {
+      font-size: 11px;
+      color: var(--neon-soft);
+      margin-top: 3px;
+    }
+
+    /* Standard White Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-light);
+      margin-top: 16px;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--purple-600);
+      cursor: pointer;
+    }
+
+    /* 4 Quick Action Buttons (matches screenshot) */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      text-align: center;
+    }
+
+    .qa-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 2px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: transform 0.16s ease, background 0.16s ease;
+    }
+
+    .qa-item:hover {
+      transform: translateY(-2px);
+      background: #F8F7FF;
+    }
+
+    .qa-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qa-circle.c-blue   { background: #EBF2FF; color: #3B82F6; }
+    .qa-circle.c-rose   { background: #FCEEEE; color: #DC4C64; }
+    .qa-circle.c-mint   { background: #E9F9F1; color: #16A34A; }
+    .qa-circle.c-purple { background: #F1ECFE; color: #7C3AED; }
+
+    .qa-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    /* Profile White Rounded Menu Card (matches screenshot) */
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 4px;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      background: transparent;
+      border-left: 0;
+      border-right: 0;
+      border-top: 0;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      transition: background 0.15s ease;
+    }
+
+    .menu-row:last-child {
+      border-bottom: none;
+    }
+
+    .menu-row:hover {
+      background: #FAF9FF;
+    }
+
+    .menu-row-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-icon-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #F1F2F9;
+      color: #3F4359;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .menu-row-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .menu-arrow {
+      color: #2D3148;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Virtual Mining Card */
+    .mining-card {
+      background: linear-gradient(145deg, #1E1B4B 0%, #3B0764 100%);
+      color: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      margin-top: 16px;
+      box-shadow: 0 12px 28px rgba(46, 16, 101, 0.24);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+    }
+
+    .mining-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(168, 85, 247, 0.22);
+      color: #E9D5FF;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22C55E;
+    }
+
+    .mining-timer-display {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 12px 0 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin: 12px 0 16px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 45%;
+      background: linear-gradient(90deg, #A855F7 0%, #E879F9 100%);
+      border-radius: var(--radius-pill);
+      transition: width 0.4s ease;
+    }
+
+    .mining-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6D28D9 0%, #9333EA 100%);
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(109, 40, 217, 0.28);
+    }
+
+    .btn-neon {
+      background: linear-gradient(135deg, #9333EA 0%, #C026D3 100%);
+      color: #FFFFFF;
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.38);
+    }
+
+    .btn-sm {
+      width: auto;
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+
+    /* Stats & Badges */
+    .stats-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .stat-box {
+      background: #F8F7FE;
+      border: 1px solid #EAE6FA;
+      border-radius: var(--radius-lg);
+      padding: 14px;
+    }
+
+    .stat-box-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-box-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--purple-900);
+    }
+
+    .badge-soft {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-purple { background: #F3E8FF; color: #6D28D9; }
+    .badge-green  { background: #DCFCE7; color: #15803D; }
+    .badge-amber  { background: #FEF3C7; color: #B45309; }
+
+    /* Plan Cards */
+    .plan-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      border: 1.5px solid var(--border-light);
+      box-shadow: var(--shadow-card);
+      margin-top: 14px;
+    }
+
+    .plan-card.featured {
+      border-color: var(--neon-purple);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAF5FF 100%);
+    }
+
+    .plan-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--purple-800);
+      margin: 6px 0;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin: 12px 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+    }
+
+    /* Lists & Forms */
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    .tx-amount-pos { font-weight: 800; color: #059669; white-space: nowrap; }
+    .tx-amount-neg { font-weight: 800; color: #DC2626; white-space: nowrap; }
+
+    .form-group { margin-bottom: 14px; }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid #DCDCEB;
+      background: #FFFFFF;
+      font-size: 14.5px;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--purple-600);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
+    }
+
+    .copy-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #F5F3FF;
+      border: 1px solid #DDD6FE;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+    }
+
+    .copy-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--purple-900);
+      min-width: 0;
+    }
+
+    .copy-box input:focus { outline: none; }
+
+    .demo-banner {
+      background: #F5F3FF;
+      border: 1px dashed #C4B5FD;
+      color: #4C1D95;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 14px;
+    }
+
+    /* Fixed 5-Item Mobile Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 560px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-light);
+      box-shadow: var(--shadow-nav);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 8px 4px calc(10px + env(safe-area-inset-bottom, 0px));
+      z-index: 999;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #7A7F9A;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 0;
+      cursor: pointer;
+      transition: color 0.16s ease;
+      user-select: none;
+    }
+
+    .bottom-nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+  
+    /* Auth Screen & Toast Notifications */
+    .auth-overlay {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 18px;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .auth-brand-head {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .auth-logo-lg {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #4C1D95 0%, #9333EA 100%);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 24px rgba(109, 40, 217, 0.3);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 6px;
+      background: #ECEAF7;
+      padding: 5px;
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 9px 6px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .auth-tab-btn.active {
+      background: #FFFFFF;
+      color: var(--purple-700);
+      box-shadow: 0 2px 8px rgba(46, 16, 101, 0.08);
+    }
+
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+
+    .btn-outline-soft {
+      background: #F5F3FF;
+      color: var(--purple-700);
+      border: 1px solid #DDD6FE;
+    }
+
+    .toast-banner {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      max-width: 440px;
+      width: calc(100% - 32px);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 600;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      box-shadow: 0 10px 28px rgba(17, 19, 34, 0.18);
+    }
+
+    .toast-banner.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-success { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+    .toast-error   { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+    .toast-info    { background: #F3E8FF; color: #5B21B6; border: 1px solid #D8B4FE; }
+
+    body.is-logged-out .app-shell,
+    body.is-logged-out .bottom-nav {
+      display: none !important;
+    }
+
+    body:not(.is-logged-out) #authScreen {
+      display: none !important;
+    }
+
+  </style>
+</head>
+<body class="is-logged-out">
+  <div id="toastBanner" class="toast-banner" role="status" aria-live="polite"></div>
+
+  <!-- =====================================================================
+       FIREBASE AUTH SYSTEM (Email/Password, Phone OTP, Google, Reset)
+       ===================================================================== -->
+  <div id="authScreen" class="auth-overlay">
+    <div class="auth-brand-head">
+      <div class="auth-logo-lg">N</div>
+      <h1 style="font-size:24px; font-weight:800; color:var(--purple-900);">Nexbitra</h1>
+      <p style="font-size:13.5px; color:var(--text-muted);">Secure Firebase Login &bull; Virtual Mining Platform</p>
+    </div>
+
+    <div class="card" style="margin-top:0;">
+      <div class="auth-tabs" role="tablist">
+        <button type="button" class="auth-tab-btn active" id="tabLoginBtn" data-auth-tab="loginPanel">Email</button>
+        <button type="button" class="auth-tab-btn" id="tabPhoneBtn" data-auth-tab="phonePanel">Phone</button>
+        <button type="button" class="auth-tab-btn" id="tabRegisterBtn" data-auth-tab="registerPanel">Register</button>
+        <button type="button" class="auth-tab-btn" id="tabForgotBtn" data-auth-tab="forgotPanel">Reset</button>
+      </div>
+
+      <!-- Email / Password Login Panel -->
+      <div id="loginPanel" class="auth-panel active">
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="loginIdentity">Email Address</label>
+            <input type="email" id="loginIdentity" class="form-control" placeholder="you@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" id="emailLoginBtn" class="btn btn-primary">Sign In with Email</button>
+        </form>
+      </div>
+
+      <!-- Phone OTP Login Panel -->
+      <div id="phonePanel" class="auth-panel">
+        <form id="phoneSendForm">
+          <div class="form-group">
+            <label class="form-label" for="phoneNumberInput">Phone Number (with country code)</label>
+            <input type="tel" id="phoneNumberInput" class="form-control" placeholder="+8801XXXXXXXXX" required>
+          </div>
+          <div id="recaptcha-container" style="margin-bottom:10px;"></div>
+          <button type="submit" id="sendOtpBtn" class="btn btn-primary">Send Verification Code (SMS)</button>
+        </form>
+
+        <form id="phoneVerifyForm" style="display:none; margin-top:14px;">
+          <div class="form-group">
+            <label class="form-label" for="otpCodeInput">Enter 6-Digit SMS Code</label>
+            <input type="text" id="otpCodeInput" class="form-control" placeholder="123456" maxlength="6" inputmode="numeric" required>
+          </div>
+          <button type="submit" id="verifyOtpBtn" class="btn btn-neon">Verify &amp; Sign In</button>
+        </form>
+      </div>
+
+      <!-- Register Panel -->
+      <div id="registerPanel" class="auth-panel">
+        <form id="registerForm">
+          <div class="form-group">
+            <label class="form-label" for="regUsername">Full Name / Username</label>
+            <input type="text" id="regUsername" class="form-control" placeholder="e.g., Maruf" required minlength="2">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Email Address</label>
+            <input type="email" id="regEmail" class="form-control" placeholder="you@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Password (min 6 chars)</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="Create password" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regConfirm">Confirm Password</label>
+            <input type="password" id="regConfirm" class="form-control" placeholder="Repeat password" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regReferral">Referral Code (Optional)</label>
+            <input type="text" id="regReferral" class="form-control" placeholder="e.g., NXB8X2K9Q">
+          </div>
+          <button type="submit" id="registerSubmitBtn" class="btn btn-primary">Create Nexbitra Account</button>
+        </form>
+      </div>
+
+      <!-- Forgot / Reset Password Panel -->
+      <div id="forgotPanel" class="auth-panel">
+        <form id="forgotForm">
+          <div class="form-group">
+            <label class="form-label" for="forgotEmail">Registered Email Address</label>
+            <input type="email" id="forgotEmail" class="form-control" placeholder="you@gmail.com" required>
+          </div>
+          <button type="submit" id="resetSubmitBtn" class="btn btn-primary">Send Password Reset Email</button>
+        </form>
+      </div>
+
+      <!-- Divider + Google Sign-In -->
+      <div style="display:flex; align-items:center; gap:10px; margin:16px 0 12px; color:var(--text-muted); font-size:12px;">
+        <span style="flex:1; height:1px; background:var(--border-light);"></span>
+        <span>OR CONTINUE WITH</span>
+        <span style="flex:1; height:1px; background:var(--border-light);"></span>
+      </div>
+
+      <button type="button" id="googleLoginBtn" class="btn btn-outline-soft" style="margin-bottom:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.3-1.5 3.8-5.4 3.8-3.3 0-5.9-2.7-5.9-6s2.6-6 5.9-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.4 14.6 2.5 12 2.5 6.8 2.5 2.5 6.8 2.5 12s4.3 9.5 9.5 9.5c5.5 0 9.1-3.8 9.1-9.2 0-.6-.1-1.1-.2-1.6H12z"/></svg>
+        Continue with Google
+      </button>
+
+      <button type="button" id="demoLoginBtn" class="btn" style="background:transparent; color:var(--text-muted); font-size:13px; padding:8px;">
+        Preview Dashboard (Offline Demo)
+      </button>
+    </div>
+
+    <div class="demo-banner" style="text-align:center;">
+      Connected to Firebase Project: <strong>nexbitra-dd699</strong> (Email, Phone &amp; Google Auth enabled)
+    </div>
+  </div>
+
+  <!-- Pure CSS Page Router Inputs (Default: Profile / Me matching your reference screenshot) -->
+  <input type="radio" name="page" id="route-home" class="page-radio">
+  <input type="radio" name="page" id="route-task" class="page-radio">
+  <input type="radio" name="page" id="route-team" class="page-radio">
+  <input type="radio" name="page" id="route-vip" class="page-radio">
+  <input type="radio" name="page" id="route-me" class="page-radio" checked>
+  <input type="radio" name="page" id="route-wallet" class="page-radio">
+  <input type="radio" name="page" id="route-records" class="page-radio">
+  <input type="radio" name="page" id="route-password" class="page-radio">
+  <input type="radio" name="page" id="route-support" class="page-radio">
+
+  <div class="app-shell">
+
+    <!-- ===================================================================
+         1. HOME PAGE
+         =================================================================== -->
+    <section id="page-home" class="page-section">
+      <header class="hero-header">
+        <div class="top-bar">
+          <label for="route-records" class="icon-circle-btn" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notif-dot"></span>
+          </label>
+          <div class="brand-lockup">
+            <span class="brand-badge">N</span>
+            <span class="brand-name">Nexbitra</span>
+          </div>
+          <label for="route-support" class="pill-btn">Help</label>
+        </div>
+
+        <div class="welcome-row">
+          <div>
+            <div class="welcome-label">Welcome Back,</div>
+            <div class="welcome-user" id="homeUserEmail">maruf@gmail.com</div>
+          </div>
+          <span class="tier-badge" id="homeUserTier">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+            V1
+          </span>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="overlap-card">
+          <div class="balance-card-dark">
+            <div class="balance-col">
+              <div class="balance-label">Total Virtual Balance (PTS)</div>
+              <div class="balance-value" id="homeBalanceValue">814.00</div>
+              <div class="balance-sub">Demo Simulation Points</div>
+            </div>
+            <div class="balance-col">
+              <div class="balance-label">Total Virtual Earnings (PTS)</div>
+              <div class="balance-value" id="homeEarningsValue">214.00</div>
+              <div class="balance-sub">1 Active Plan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="quick-actions-grid">
+            <label for="route-me" class="qa-item">
+              <span class="qa-circle c-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M16 12h2"/></svg>
+              </span>
+              <span class="qa-label">Account</span>
+            </label>
+            <label for="route-wallet" class="qa-item">
+              <span class="qa-circle c-rose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+              </span>
+              <span class="qa-label">Recharge</span>
+            </label>
+            <label for="route-wallet" class="qa-item">
+              <span class="qa-circle c-mint">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M12 3v8"/><path d="M9 8l3 3 3-3"/></svg>
+              </span>
+              <span class="qa-label">Withdraw</span>
+            </label>
+            <label for="route-records" class="qa-item">
+              <span class="qa-circle c-purple">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              </span>
+              <span class="qa-label">Financial<br>records</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Virtual Mining Widget (JS Hooks Ready) -->
+        <div class="mining-card" id="miningWidget">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="font-size:16px; font-weight:800;">Virtual Mining Engine</div>
+              <div style="font-size:12px; color:#D8B4FE;">Simulation session controller</div>
+            </div>
+            <span class="mining-status-pill"><span class="status-dot"></span> <span id="miningStatusText">Ready</span></span>
+          </div>
+
+          <div class="mining-timer-display" id="miningTimer">00:05:00</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="miningProgressFill"></div>
+          </div>
+          <div class="mining-meta">
+            <span>Est. Reward: <strong id="miningRewardText">+40.00 PTS</strong></span>
+            <span>Plan: <strong id="miningPlanName">Starter Plan</strong></span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <button type="button" class="btn btn-neon" id="startMiningBtn" data-action="start-mining">Start Mining</button>
+            <button type="button" class="btn btn-primary" id="claimRewardBtn" data-action="claim-mining">Claim Reward</button>
+          </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">Latest Announcements</h2>
+            <span class="badge-soft badge-purple">New</span>
+          </div>
+          <div class="list-item" style="display:block;">
+            <div style="font-weight:700; font-size:14px; color:var(--purple-900);">Welcome to Nexbitra</div>
+            <div style="font-size:13px; color:var(--text-muted);">Start your virtual mining session and complete daily tasks to earn demo virtual points.</div>
+          </div>
+        </div>
+
+        <div class="demo-banner">
+          <strong>Virtual Simulation Notice:</strong> All points and balances are demo virtual points only and do not represent real cryptocurrency or guaranteed financial returns.
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         2. TASK PAGE
+         =================================================================== -->
+    <section id="page-task" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-home" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Task Center</span></div>
+          <span class="pill-btn" id="taskDoneCount">Daily Tasks</span>
+        </div>
+        <p style="font-size:13px; color:rgba(255,255,255,0.88);">Complete daily tasks to earn demo virtual points.</p>
+      </header>
+
+      <main class="page-content">
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">Available Tasks</h2>
+            <span class="badge-soft badge-purple">Virtual Rewards</span>
+          </div>
+
+          <div class="list-item" data-task-id="1">
+            <div>
+              <div style="font-weight:700; font-size:14px;">Daily Check-In Bonus <span class="badge-soft badge-purple">Daily</span></div>
+              <div style="font-size:12.5px; color:var(--text-muted);">Claim your daily virtual check-in reward.</div>
+              <div style="font-size:13px; font-weight:700; color:#059669;">+20.00 PTS</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="claimTask1" data-action="claim-task" data-task="1">Claim</button>
+          </div>
+
+          <div class="list-item" data-task-id="2">
+            <div>
+              <div style="font-weight:700; font-size:14px;">Start a Mining Session <span class="badge-soft badge-purple">Daily</span></div>
+              <div style="font-size:12.5px; color:var(--text-muted);">Run a virtual mining session from Home.</div>
+              <div style="font-size:13px; font-weight:700; color:#059669;">+30.00 PTS</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="claimTask2" data-action="claim-task" data-task="2">Claim</button>
+          </div>
+
+          <div class="list-item" data-task-id="3">
+            <div>
+              <div style="font-weight:700; font-size:14px;">Share Referral Code <span class="badge-soft badge-amber">One-Time</span></div>
+              <div style="font-size:12.5px; color:var(--text-muted);">Copy your invite link in the Team tab.</div>
+              <div style="font-size:13px; font-weight:700; color:#059669;">+40.00 PTS</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="claimTask3" data-action="claim-task" data-task="3">Claim</button>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         3. TEAM / REFERRAL PAGE
+         =================================================================== -->
+    <section id="page-team" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-home" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Team &amp; Referral</span></div>
+          <span class="pill-btn">+50 PTS</span>
+        </div>
+        <p style="font-size:13px; color:rgba(255,255,255,0.88);">Invite friends with your code and earn transparent demo virtual points.</p>
+      </header>
+
+      <main class="page-content">
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:12px;">Your Personal Invite</h2>
+          <div class="form-group">
+            <label class="form-label" for="refCodeInput">Personal Referral Code</label>
+            <div class="copy-box">
+              <input type="text" id="refCodeInput" value="MRF8X2K9Q" readonly>
+              <button type="button" class="btn btn-primary btn-sm" id="copyRefCodeBtn" data-copy="refCodeInput">Copy</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="refLinkInput">Referral Link</label>
+            <div class="copy-box">
+              <input type="text" id="refLinkInput" value="https://nexbitra.local/register?ref=MRF8X2K9Q" readonly>
+              <button type="button" class="btn btn-primary btn-sm" id="copyRefLinkBtn" data-copy="refLinkInput">Copy Link</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid-2">
+          <div class="stat-box">
+            <div class="stat-box-label">Total Referrals</div>
+            <div class="stat-box-val" id="totalReferralsVal">4</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-label">Active Referrals</div>
+            <div class="stat-box-val" id="activeReferralsVal">3</div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         4. VIP / MINING PLANS PAGE
+         =================================================================== -->
+    <section id="page-vip" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-home" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">VIP Mining Plans</span></div>
+          <span class="pill-btn" id="vipBalancePill">814.00 PTS</span>
+        </div>
+        <p style="font-size:13px; color:rgba(255,255,255,0.88);">All plans operate strictly using demo virtual points.</p>
+      </header>
+
+      <main class="page-content">
+        <article class="plan-card">
+          <div class="plan-header">
+            <h2 style="font-size:18px; font-weight:800; color:var(--purple-900);">Starter Plan</h2>
+            <span class="badge-soft badge-purple">V1</span>
+          </div>
+          <div class="plan-price">500 <span style="font-size:14px; font-weight:600; color:var(--text-muted);">Demo Points</span></div>
+          <div style="font-size:12.5px; color:var(--purple-700); font-weight:600;">Duration: 30 Days &bull; Virtual Mining Features</div>
+          <ul class="plan-features">
+            <li>&#10003; Virtual Mining Features</li>
+            <li>&#10003; Basic Dashboard &amp; Session Timer</li>
+            <li>&#10003; +15 Bonus Demo Points per Session</li>
+          </ul>
+          <button type="button" class="btn btn-primary" id="activatePlanStarter" data-action="activate-plan" data-plan="starter" data-price="500">Activate Plan</button>
+        </article>
+
+        <article class="plan-card featured">
+          <div class="plan-header">
+            <h2 style="font-size:18px; font-weight:800; color:var(--purple-900);">Silver Plan</h2>
+            <span class="badge-soft badge-purple">V2</span>
+          </div>
+          <div class="plan-price">1,000 <span style="font-size:14px; font-weight:600; color:var(--text-muted);">Demo Points</span></div>
+          <div style="font-size:12.5px; color:var(--purple-700); font-weight:600;">Duration: 45 Days &bull; Extended Virtual Features</div>
+          <ul class="plan-features">
+            <li>&#10003; Extended Virtual Features</li>
+            <li>&#10003; Detailed History &amp; Ledger Insights</li>
+            <li>&#10003; +35 Bonus Demo Points per Session</li>
+          </ul>
+          <button type="button" class="btn btn-neon" id="activatePlanSilver" data-action="activate-plan" data-plan="silver" data-price="1000">Activate Plan</button>
+        </article>
+
+        <article class="plan-card">
+          <div class="plan-header">
+            <h2 style="font-size:18px; font-weight:800; color:var(--purple-900);">Gold Plan</h2>
+            <span class="badge-soft badge-amber">V3</span>
+          </div>
+          <div class="plan-price">5,000 <span style="font-size:14px; font-weight:600; color:var(--text-muted);">Demo Points</span></div>
+          <div style="font-size:12.5px; color:var(--purple-700); font-weight:600;">Duration: 60 Days &bull; Premium Virtual Features</div>
+          <ul class="plan-features">
+            <li>&#10003; Premium Virtual Features</li>
+            <li>&#10003; Advanced Team &amp; Session Statistics</li>
+            <li>&#10003; +100 Bonus Demo Points per Session</li>
+          </ul>
+          <button type="button" class="btn btn-primary" id="activatePlanGold" data-action="activate-plan" data-plan="gold" data-price="5000">Activate Plan</button>
+        </article>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         5. PROFILE PAGE ("ME") — Matches Reference Screenshot Layout
+         =================================================================== -->
+    <section id="page-me" class="page-section">
+      <header class="hero-header">
+        <div class="top-bar">
+          <label for="route-records" class="icon-circle-btn" aria-label="Messages">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="notif-dot"></span>
+          </label>
+
+          <div class="brand-lockup">
+            <span class="brand-badge">N</span>
+            <span class="brand-name">Nexbitra</span>
+          </div>
+
+          <label for="route-support" class="pill-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            English
+          </label>
+        </div>
+
+        <div class="welcome-row">
+          <div>
+            <div class="welcome-label">Welcome Back,</div>
+            <div class="welcome-user" id="profileUserEmail">maruf@gmail.com</div>
+          </div>
+          <span class="tier-badge" id="profileMembershipBadge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+            V1
+          </span>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <!-- Dark Overlapping Balance Card -->
+        <div class="overlap-card">
+          <div class="balance-card-dark">
+            <div class="balance-col">
+              <div class="balance-label">Total Balance (PTS)</div>
+              <div class="balance-value" id="totalBalanceValue">814.00</div>
+            </div>
+            <div class="balance-col">
+              <div class="balance-label">Total Deposit (Demo)</div>
+              <div class="balance-value" id="totalDepositValue">600.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Quick Action Buttons Card -->
+        <div class="card">
+          <div class="quick-actions-grid">
+            <label for="route-home" class="qa-item">
+              <span class="qa-circle c-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M16 12h2"/></svg>
+              </span>
+              <span class="qa-label">Account</span>
+            </label>
+
+            <label for="route-wallet" class="qa-item">
+              <span class="qa-circle c-rose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+              </span>
+              <span class="qa-label">Recharge</span>
+            </label>
+
+            <label for="route-wallet" class="qa-item">
+              <span class="qa-circle c-mint">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M12 3v8"/><path d="M9 8l3 3 3-3"/></svg>
+              </span>
+              <span class="qa-label">Withdraw</span>
+            </label>
+
+            <label for="route-records" class="qa-item">
+              <span class="qa-circle c-purple">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              </span>
+              <span class="qa-label">Financial<br>records</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- White Rounded Menu Card (Transfer, Change Password, Sign Out) -->
+        <div class="card" style="padding: 6px 18px;">
+          <div class="menu-list">
+            <label for="route-wallet" class="menu-row">
+              <span class="menu-row-left">
+                <span class="menu-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 10H3l4-4"/><path d="M7 14h14l-4 4"/></svg>
+                </span>
+                <span class="menu-row-text">Transfer</span>
+              </span>
+              <span class="menu-arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </label>
+
+            <label for="route-password" class="menu-row">
+              <span class="menu-row-left">
+                <span class="menu-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="17" cy="12" r="1.5" fill="currentColor"/><line x1="5" y1="16" x2="19" y2="16"/></svg>
+                </span>
+                <span class="menu-row-text">Change Password</span>
+              </span>
+              <span class="menu-arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </label>
+
+            <button type="button" class="menu-row" id="signOutBtn" data-action="sign-out">
+              <span class="menu-row-left">
+                <span class="menu-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </span>
+                <span class="menu-row-text">Sign Out</span>
+              </span>
+              <span class="menu-arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         6. WALLET PAGE (Recharge / Withdraw / Transfer Demo Forms)
+         =================================================================== -->
+    <section id="page-wallet" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-me" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Virtual Wallet</span></div>
+          <label for="route-records" class="pill-btn">Records</label>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:10px;">Demo Recharge (Virtual Points)</h2>
+          <form id="rechargeForm" data-form="demo-recharge">
+            <div class="form-group">
+              <label class="form-label" for="rechargeAmount">Demo Points Amount</label>
+              <input type="number" id="rechargeAmount" class="form-control" placeholder="e.g., 500" min="10">
+            </div>
+            <button type="submit" class="btn btn-primary">Record Demo Recharge</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:10px;">Demo Withdraw / Transfer</h2>
+          <form id="transferForm" data-form="demo-transfer">
+            <div class="form-group">
+              <label class="form-label" for="transferTarget">Recipient Email / Demo Label</label>
+              <input type="text" id="transferTarget" class="form-control" placeholder="friend@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="transferAmount">Virtual Points Amount</label>
+              <input type="number" id="transferAmount" class="form-control" placeholder="e.g., 100" min="5">
+            </div>
+            <button type="submit" class="btn btn-neon">Submit Virtual Request</button>
+          </form>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         7. FINANCIAL RECORDS / TRANSACTION HISTORY
+         =================================================================== -->
+    <section id="page-records" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-me" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Financial Records</span></div>
+          <span class="pill-btn">Demo Ledger</span>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="card" id="transactionList">
+          <h2 class="card-title" style="margin-bottom:10px;">Recent Virtual Transactions</h2>
+          <div class="list-item">
+            <div>
+              <div style="font-weight:700; font-size:13.5px;">Demo Virtual Points Top-Up</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Simulation Mode &bull; Recorded</div>
+            </div>
+            <div class="tx-amount-pos">+600.00</div>
+          </div>
+          <div class="list-item">
+            <div>
+              <div style="font-weight:700; font-size:13.5px;">Virtual Mining Session Reward</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Starter Plan &bull; Claimed</div>
+            </div>
+            <div class="tx-amount-pos">+40.00</div>
+          </div>
+          <div class="list-item">
+            <div>
+              <div style="font-weight:700; font-size:13.5px;">Daily Check-In Task Reward</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Task Center &bull; Completed</div>
+            </div>
+            <div class="tx-amount-pos">+20.00</div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         8. CHANGE PASSWORD PAGE
+         =================================================================== -->
+    <section id="page-password" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-me" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Change Password</span></div>
+          <span style="width:38px;"></span>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="card">
+          <form id="changePasswordForm" data-form="change-password">
+            <div class="form-group">
+              <label class="form-label" for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newPassword">New Password</label>
+              <input type="password" id="newPassword" class="form-control" required minlength="8">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirmPassword">Confirm New Password</label>
+              <input type="password" id="confirmPassword" class="form-control" required minlength="8">
+            </div>
+            <button type="submit" class="btn btn-primary">Save New Password</button>
+          </form>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         9. SUPPORT PAGE
+         =================================================================== -->
+    <section id="page-support" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-me" class="icon-circle-btn" aria-label="Back">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Support Center</span></div>
+          <span style="width:38px;"></span>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:12px;">Submit a Support Ticket</h2>
+          <form id="supportForm" data-form="support-ticket">
+            <div class="form-group">
+              <label class="form-label" for="supportSubject">Subject</label>
+              <input type="text" id="supportSubject" class="form-control" placeholder="How can we help?" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supportMessage">Message</label>
+              <textarea id="supportMessage" rows="4" class="form-control" placeholder="Write your message..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Ticket</button>
+          </form>
+        </div>
+      </main>
+    </section>
+
+  </div><!-- /.app-shell -->
+
+  <!-- Fixed 5-Item Mobile Bottom Navigation (Home, Task, Team, VIP, Me) -->
+  <nav class="bottom-nav" aria-label="Main Navigation">
+    <label for="route-home" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+      <span>Home</span>
+    </label>
+
+    <label for="route-task" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Task</span>
+    </label>
+
+    <label for="route-team" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Team</span>
+    </label>
+
+    <label for="route-vip" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>VIP</span>
+    </label>
+
+    <label for="route-me" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Me</span>
+    </label>
+  </nav>
+
+  <!-- Ready for your JavaScript file: uncomment the line below when you add app.js -->
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      updateProfile,
+      sendPasswordResetEmail,
+      GoogleAuthProvider,
+      signInWithPopup,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+      EmailAuthProvider,
+      reauthenticateWithCredential,
+      updatePassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    // Your Nexbitra Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWA6ymvIY3HIosNon075PMc4MayK7TvO0",
+      authDomain: "nexbitra-dd699.firebaseapp.com",
+      projectId: "nexbitra-dd699",
+      storageBucket: "nexbitra-dd699.firebasestorage.app",
+      messagingSenderId: "228789366330",
+      appId: "1:228789366330:web:9a28381297277c842d8f03",
+      measurementId: "G-PQLXVMDSWS"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    let confirmationResult = null;
+    let recaptchaVerifier = null;
+    let isOfflineDemo = false;
+
+    // Toast Helper
+    let toastTimer = null;
+    function showToast(msg, type = 'info') {
+      const el = document.getElementById('toastBanner');
+      if (!el) return;
+      el.textContent = msg;
+      el.className = 'toast-banner show toast-' + type;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 3800);
+    }
+
+    function friendlyError(err) {
+      const code = err?.code || '';
+      const map = {
+        'auth/invalid-credential': 'Incorrect email or password.',
+        'auth/user-not-found': 'No account found with this email.',
+        'auth/wrong-password': 'Incorrect password.',
+        'auth/email-already-in-use': 'This email is already registered. Please sign in.',
+        'auth/weak-password': 'Password should be at least 6 characters.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/too-many-requests': 'Too many attempts. Please wait and try again.',
+        'auth/popup-closed-by-user': 'Google sign-in popup was closed.',
+        'auth/unauthorized-domain': 'This domain is not added in Firebase Console → Authentication → Settings → Authorized domains yet.',
+        'auth/invalid-phone-number': 'Invalid phone number. Include country code (e.g., +8801XXXXXXXXX).',
+        'auth/invalid-verification-code': 'Invalid 6-digit OTP code. Please try again.'
+      };
+      return map[code] || (err?.message || 'Authentication failed. Please try again.');
+    }
+
+    function makeReferralCode(uid) {
+      return 'NXB' + String(uid || 'DEMO01').slice(0, 6).toUpperCase();
+    }
+
+    function syncUserUI(user) {
+      if (!user && !isOfflineDemo) {
+        document.body.classList.add('is-logged-out');
+        return;
+      }
+
+      document.body.classList.remove('is-logged-out');
+      const displayIdentity = user
+        ? (user.email || user.phoneNumber || user.displayName || 'Nexbitra User')
+        : 'demo@nexbitra.com';
+      const refCode = user ? makeReferralCode(user.uid) : 'NXB8X2K9Q';
+
+      const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      };
+
+      setText('homeUserEmail', displayIdentity);
+      setText('profileUserEmail', displayIdentity);
+      setVal('refCodeInput', refCode);
+      setVal('refLinkInput', window.location.origin + '/?ref=' + refCode);
+    }
+
+    // Listen to Firebase Auth State
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        isOfflineDemo = false;
+        syncUserUI(user);
+      } else if (!isOfflineDemo) {
+        syncUserUI(null);
+      }
+    });
+
+    // Auth Tab Switching
+    document.querySelectorAll('[data-auth-tab]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-auth-tab');
+        document.querySelectorAll('.auth-tab-btn').forEach((b) => b.classList.remove('active'));
+        document.querySelectorAll('.auth-panel').forEach((p) => p.classList.remove('active'));
+        btn.classList.add('active');
+        const panel = document.getElementById(targetId);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    // 1. Email / Password Login
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginIdentity').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const btn = document.getElementById('emailLoginBtn');
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          document.getElementById('route-home').checked = true;
+          showToast('Signed in to Nexbitra!', 'success');
+          loginForm.reset();
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Sign In with Email';
+        }
+      });
+    }
+
+    // 2. Email / Password Register
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('regUsername').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const confirm = document.getElementById('regConfirm').value;
+
+        if (password !== confirm) {
+          showToast('Passwords do not match.', 'error');
+          return;
+        }
+
+        const btn = document.getElementById('registerSubmitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Creating account...';
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          if (username) {
+            await updateProfile(cred.user, { displayName: username });
+          }
+          document.getElementById('route-home').checked = true;
+          showToast('Welcome to Nexbitra, ' + (username || email) + '!', 'success');
+          registerForm.reset();
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Create Nexbitra Account';
+        }
+      });
+    }
+
+    // 3. Password Reset Email
+    const forgotForm = document.getElementById('forgotForm');
+    if (forgotForm) {
+      forgotForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('forgotEmail').value.trim();
+        const btn = document.getElementById('resetSubmitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        try {
+          await sendPasswordResetEmail(auth, email);
+          showToast('Password reset link sent to ' + email, 'success');
+          forgotForm.reset();
+          document.getElementById('tabLoginBtn').click();
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Send Password Reset Email';
+        }
+      });
+    }
+
+    // 4. Google Sign-In
+    const googleBtn = document.getElementById('googleLoginBtn');
+    if (googleBtn) {
+      googleBtn.addEventListener('click', async () => {
+        googleBtn.disabled = true;
+        try {
+          await signInWithPopup(auth, googleProvider);
+          document.getElementById('route-home').checked = true;
+          showToast('Signed in with Google!', 'success');
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        } finally {
+          googleBtn.disabled = false;
+        }
+      });
+    }
+
+    // 5. Phone Number OTP Login
+    const phoneSendForm = document.getElementById('phoneSendForm');
+    const phoneVerifyForm = document.getElementById('phoneVerifyForm');
+
+    if (phoneSendForm) {
+      phoneSendForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const phone = document.getElementById('phoneNumberInput').value.trim();
+        const btn = document.getElementById('sendOtpBtn');
+        btn.disabled = true;
+        btn.textContent = 'Sending SMS...';
+        try {
+          if (!recaptchaVerifier) {
+            recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+              size: 'invisible'
+            });
+          }
+          confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier);
+          phoneVerifyForm.style.display = 'block';
+          showToast('Verification code sent to ' + phone, 'success');
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Send Verification Code (SMS)';
+        }
+      });
+    }
+
+    if (phoneVerifyForm) {
+      phoneVerifyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!confirmationResult) {
+          showToast('Please request an SMS code first.', 'error');
+          return;
+        }
+        const code = document.getElementById('otpCodeInput').value.trim();
+        const btn = document.getElementById('verifyOtpBtn');
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+        try {
+          await confirmationResult.confirm(code);
+          document.getElementById('route-home').checked = true;
+          showToast('Phone verified! Welcome to Nexbitra.', 'success');
+          phoneSendForm.reset();
+          phoneVerifyForm.reset();
+          phoneVerifyForm.style.display = 'none';
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Verify & Sign In';
+        }
+      });
+    }
+
+    // 6. Change Password (for Email/Password users inside Profile)
+    const changePwForm = document.getElementById('changePasswordForm');
+    if (changePwForm) {
+      changePwForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        if (!user || !user.email) {
+          showToast('Password change is available for Email/Password accounts.', 'info');
+          return;
+        }
+        const curr = document.getElementById('currentPassword').value;
+        const next = document.getElementById('newPassword').value;
+        const conf = document.getElementById('confirmPassword').value;
+        if (next.length < 6 || next !== conf) {
+          showToast('New password must be 6+ chars and match confirmation.', 'error');
+          return;
+        }
+        try {
+          const cred = EmailAuthProvider.credential(user.email, curr);
+          await reauthenticateWithCredential(user, cred);
+          await updatePassword(user, next);
+          changePwForm.reset();
+          document.getElementById('route-me').checked = true;
+          showToast('Password updated in Firebase!', 'success');
+        } catch (err) {
+          showToast(friendlyError(err), 'error');
+        }
+      });
+    }
+
+    // 7. Sign Out
+    const signOutBtn = document.getElementById('signOutBtn');
+    if (signOutBtn) {
+      signOutBtn.addEventListener('click', async () => {
+        isOfflineDemo = false;
+        try {
+          await signOut(auth);
+        } catch (err) {}
+        syncUserUI(null);
+        showToast('Signed out of Nexbitra.', 'info');
+      });
+    }
+
+    // Offline UI Preview Fallback (useful before adding domain to Firebase Authorized Domains)
+    const demoBtn = document.getElementById('demoLoginBtn');
+    if (demoBtn) {
+      demoBtn.addEventListener('click', () => {
+        isOfflineDemo = true;
+        syncUserUI(null);
+        document.getElementById('route-home').checked = true;
+        showToast('Opened offline UI preview mode.', 'info');
+      });
+    }
+
+    // Copy Referral Code / Link
+    document.querySelectorAll('[data-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const target = document.getElementById(btn.getAttribute('data-copy'));
+        if (!target) return;
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(target.value);
+          } else {
+            target.select();
+            document.execCommand('copy');
+          }
+          showToast('Copied: ' + target.value, 'success');
+        } catch (err) {
+          showToast('Copy failed. Please copy manually.', 'error');
+        }
+      });
+    });
+  
+    // =========================================================================
+    // NEXBITRA INTERACTIVE ENGINE (Mining, Tasks, VIP Plans, Wallet, Support)
+    // Per-user state stored safely in localStorage (ready for Firestore sync)
+    // =========================================================================
+    let miningInterval = null;
+    let memFallback = {};
+
+    function getStateKey() {
+      const uid = auth.currentUser ? auth.currentUser.uid : 'offline_demo';
+      return 'nexbitra_state_' + uid;
+    }
+
+    function defaultState() {
+      return {
+        balance: 814.00,
+        earnings: 214.00,
+        deposit: 600.00,
+        tier: 'V1',
+        activePlanName: 'Starter Plan',
+        planBonus: 15.00,
+        claimedTasks: [],
+        activePlans: ['starter'],
+        mining: {
+          status: 'idle', // idle | active | ready
+          durationSec: 300,
+          endsAt: 0,
+          reward: 40.00
+        },
+        transactions: [
+          { title: 'Demo Virtual Points Top-Up', meta: 'Simulation Mode • Recorded', amount: 600.00 },
+          { title: 'Virtual Mining Session Reward', meta: 'Starter Plan • Claimed', amount: 40.00 },
+          { title: 'Daily Check-In Task Reward', meta: 'Task Center • Completed', amount: 20.00 }
+        ]
+      };
+    }
+
+    function loadState() {
+      const key = getStateKey();
+      let raw = null;
+      try { raw = window.localStorage.getItem(key); } catch (e) { raw = memFallback[key] || null; }
+      if (!raw) return defaultState();
+      try { return { ...defaultState(), ...JSON.parse(raw) }; } catch (e) { return defaultState(); }
+    }
+
+    function saveState(st) {
+      const key = getStateKey();
+      const str = JSON.stringify(st);
+      memFallback[key] = str;
+      try { window.localStorage.setItem(key, str); } catch (e) {}
+    }
+
+    function fmtNum(n) {
+      return Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatClock(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const h = String(Math.floor(s / 3600)).padStart(2, '0');
+      const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+      const r = String(s % 60).padStart(2, '0');
+      return `${h}:${m}:${r}`;
+    }
+
+    function renderAppState() {
+      const st = loadState();
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+      setTxt('homeBalanceValue', fmtNum(st.balance));
+      setTxt('totalBalanceValue', fmtNum(st.balance));
+      setTxt('homeEarningsValue', fmtNum(st.earnings));
+      setTxt('totalDepositValue', fmtNum(st.deposit));
+      setTxt('vipBalancePill', fmtNum(st.balance) + ' PTS');
+      setTxt('homeUserTier', st.tier);
+      setTxt('profileMembershipBadge', st.tier);
+      setTxt('miningPlanName', st.activePlanName);
+      setTxt('miningRewardText', '+' + fmtNum(25 + st.planBonus) + ' PTS');
+
+      // Render Tasks buttons
+      document.querySelectorAll('[data-action="claim-task"]').forEach((btn) => {
+        const tid = btn.getAttribute('data-task');
+        if (st.claimedTasks.includes(tid)) {
+          btn.textContent = 'Completed';
+          btn.disabled = true;
+          btn.style.opacity = '0.6';
+        } else {
+          btn.textContent = 'Claim';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      });
+
+      // Render VIP buttons
+      document.querySelectorAll('[data-action="activate-plan"]').forEach((btn) => {
+        const pid = btn.getAttribute('data-plan');
+        if (st.activePlans.includes(pid)) {
+          btn.textContent = 'Active on Account';
+          btn.disabled = true;
+          btn.style.opacity = '0.7';
+        } else {
+          btn.textContent = 'Activate Plan';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      });
+
+      // Render Transactions List
+      const txBox = document.getElementById('transactionList');
+      if (txBox) {
+        const itemsHtml = st.transactions.slice(0, 25).map((tx) => {
+          const isPos = Number(tx.amount) >= 0;
+          return `
+            <div class="list-item">
+              <div>
+                <div style="font-weight:700; font-size:13.5px;">${tx.title}</div>
+                <div style="font-size:11.5px; color:var(--text-muted);">${tx.meta}</div>
+              </div>
+              <div class="${isPos ? 'tx-amount-pos' : 'tx-amount-neg'}">${isPos ? '+' : ''}${fmtNum(tx.amount)}</div>
+            </div>
+          `;
+        }).join('');
+        txBox.innerHTML = '<h2 class="card-title" style="margin-bottom:10px;">Recent Virtual Transactions</h2>' + itemsHtml;
+      }
+
+      // Render Mining Timer
+      updateMiningDisplay();
+    }
+
+    function updateMiningDisplay() {
+      const st = loadState();
+      const timerEl = document.getElementById('miningTimer');
+      const fillEl = document.getElementById('miningProgressFill');
+      const statusEl = document.getElementById('miningStatusText');
+      const startBtn = document.getElementById('startMiningBtn');
+      const claimBtn = document.getElementById('claimRewardBtn');
+      if (!timerEl) return;
+
+      if (st.mining.status === 'active') {
+        const rem = Math.max(0, Math.ceil((st.mining.endsAt - Date.now()) / 1000));
+        if (rem <= 0) {
+          st.mining.status = 'ready';
+          saveState(st);
+        } else {
+          const pct = Math.min(100, Math.round(((st.mining.durationSec - rem) / st.mining.durationSec) * 100));
+          timerEl.textContent = formatClock(rem);
+          if (fillEl) fillEl.style.width = pct + '%';
+          if (statusEl) statusEl.textContent = 'Mining Active';
+          if (startBtn) { startBtn.disabled = true; startBtn.textContent = 'Running...'; }
+          if (claimBtn) { claimBtn.disabled = true; claimBtn.style.opacity = '0.6'; }
+          return;
+        }
+      }
+
+      if (st.mining.status === 'ready') {
+        timerEl.textContent = '00:00:00';
+        if (fillEl) fillEl.style.width = '100%';
+        if (statusEl) statusEl.textContent = 'Ready to Claim!';
+        if (startBtn) { startBtn.disabled = true; startBtn.textContent = 'Completed'; }
+        if (claimBtn) { claimBtn.disabled = false; claimBtn.style.opacity = '1'; }
+      } else {
+        timerEl.textContent = formatClock(st.mining.durationSec);
+        if (fillEl) fillEl.style.width = '0%';
+        if (statusEl) statusEl.textContent = 'Idle';
+        if (startBtn) { startBtn.disabled = false; startBtn.textContent = 'Start Mining'; }
+        if (claimBtn) { claimBtn.disabled = true; claimBtn.style.opacity = '0.6'; }
+      }
+    }
+
+    clearInterval(miningInterval);
+    miningInterval = setInterval(updateMiningDisplay, 1000);
+
+    // Start Mining
+    document.getElementById('startMiningBtn')?.addEventListener('click', () => {
+      const st = loadState();
+      if (st.mining.status !== 'idle') return;
+      st.mining.status = 'active';
+      st.mining.durationSec = 300;
+      st.mining.reward = 25 + st.planBonus;
+      st.mining.endsAt = Date.now() + st.mining.durationSec * 1000;
+      saveState(st);
+      renderAppState();
+      showToast('Virtual mining session started (5 min simulation)!', 'success');
+    });
+
+    // Claim Mining Reward
+    document.getElementById('claimRewardBtn')?.addEventListener('click', () => {
+      const st = loadState();
+      if (st.mining.status !== 'ready') {
+        showToast('Wait for the mining timer to finish before claiming.', 'info');
+        return;
+      }
+      const reward = st.mining.reward;
+      st.balance += reward;
+      st.earnings += reward;
+      st.mining.status = 'idle';
+      st.mining.endsAt = 0;
+      st.transactions.unshift({
+        title: 'Virtual Mining Session Reward',
+        meta: st.activePlanName + ' • Claimed',
+        amount: reward
+      });
+      saveState(st);
+      renderAppState();
+      showToast('Claimed +' + fmtNum(reward) + ' virtual points!', 'success');
+    });
+
+    // Claim Tasks
+    const TASK_REWARDS = { '1': { name: 'Daily Check-In Bonus', pts: 20 }, '2': { name: 'Start a Mining Session', pts: 30 }, '3': { name: 'Share Referral Code', pts: 40 } };
+    document.querySelectorAll('[data-action="claim-task"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tid = btn.getAttribute('data-task');
+        const st = loadState();
+        if (st.claimedTasks.includes(tid)) return;
+        const info = TASK_REWARDS[tid] || { name: 'Task Reward', pts: 15 };
+        st.claimedTasks.push(tid);
+        st.balance += info.pts;
+        st.earnings += info.pts;
+        st.transactions.unshift({
+          title: 'Task: ' + info.name,
+          meta: 'Task Center • Completed',
+          amount: info.pts
+        });
+        saveState(st);
+        renderAppState();
+        showToast('Task completed! +' + fmtNum(info.pts) + ' PTS added.', 'success');
+      });
+    });
+
+    // Activate VIP Plans
+    const PLAN_INFO = {
+      starter: { name: 'Starter Plan', tier: 'V1', price: 500, bonus: 15 },
+      silver:  { name: 'Silver Plan',  tier: 'V2', price: 1000, bonus: 35 },
+      gold:    { name: 'Gold Plan',    tier: 'V3', price: 5000, bonus: 100 }
+    };
+    document.querySelectorAll('[data-action="activate-plan"]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const pid = btn.getAttribute('data-plan');
+        const info = PLAN_INFO[pid];
+        if (!info) return;
+        const st = loadState();
+        if (st.activePlans.includes(pid)) return;
+        if (st.balance < info.price) {
+          showToast('Insufficient virtual points. Add demo points in Wallet → Recharge.', 'error');
+          return;
+        }
+        st.balance -= info.price;
+        st.activePlans.push(pid);
+        st.tier = info.tier;
+        st.activePlanName = info.name;
+        st.planBonus = Math.max(st.planBonus, info.bonus);
+        st.transactions.unshift({
+          title: 'Activated ' + info.name,
+          meta: 'VIP Plan • Demo Points',
+          amount: -info.price
+        });
+        saveState(st);
+        renderAppState();
+        showToast(info.name + ' activated!', 'success');
+      });
+    });
+
+    // Demo Recharge Form
+    document.getElementById('rechargeForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('rechargeAmount');
+      const amt = parseFloat(input.value);
+      if (isNaN(amt) || amt < 10) {
+        showToast('Enter at least 10 demo points.', 'error');
+        return;
+      }
+      const st = loadState();
+      st.balance += amt;
+      st.deposit += amt;
+      st.transactions.unshift({
+        title: 'Demo Virtual Points Top-Up',
+        meta: 'Simulation Mode • Recorded',
+        amount: amt
+      });
+      saveState(st);
+      input.value = '';
+      renderAppState();
+      showToast('Recorded +' + fmtNum(amt) + ' demo virtual points.', 'success');
+    });
+
+    // Demo Withdraw / Transfer Form
+    document.getElementById('transferForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const target = document.getElementById('transferTarget').value.trim();
+      const amtInput = document.getElementById('transferAmount');
+      const amt = parseFloat(amtInput.value);
+      if (!target || isNaN(amt) || amt < 5) {
+        showToast('Enter a valid recipient/label and at least 5 PTS.', 'error');
+        return;
+      }
+      const st = loadState();
+      if (st.balance < amt) {
+        showToast('Insufficient virtual points balance.', 'error');
+        return;
+      }
+      st.balance -= amt;
+      st.transactions.unshift({
+        title: 'Demo Transfer / Withdraw (' + target + ')',
+        meta: 'Simulation Only • Recorded',
+        amount: -amt
+      });
+      saveState(st);
+      e.target.reset();
+      renderAppState();
+      showToast('Recorded demo transfer of ' + fmtNum(amt) + ' PTS.', 'info');
+    });
+
+    // Support Ticket Form
+    document.getElementById('supportForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.target.reset();
+      showToast('Support ticket submitted! We will get back to you soon.', 'success');
+    });
+
+    // Re-render app state whenever auth state changes
+    onAuthStateChanged(auth, () => {
+      renderAppState();
+    });
+    renderAppState();
+
+  </script>
+
+</body>
+</html>
