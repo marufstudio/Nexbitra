@@ -80,6 +80,7 @@
     #route-vip:checked ~ .app-shell #page-vip,
     #route-me:checked ~ .app-shell #page-me,
     #route-wallet:checked ~ .app-shell #page-wallet,
+    #route-withdraw:checked ~ .app-shell #page-withdraw,
     #route-records:checked ~ .app-shell #page-records,
     #route-password:checked ~ .app-shell #page-password,
     #route-support:checked ~ .app-shell #page-support,
@@ -95,6 +96,7 @@
     #route-vip:checked ~ .bottom-nav label[for="route-vip"],
     #route-me:checked ~ .bottom-nav label[for="route-me"],
     #route-wallet:checked ~ .bottom-nav label[for="route-me"],
+    #route-withdraw:checked ~ .bottom-nav label[for="route-me"],
     #route-records:checked ~ .bottom-nav label[for="route-me"],
     #route-password:checked ~ .bottom-nav label[for="route-me"],
     #route-support:checked ~ .bottom-nav label[for="route-me"],
@@ -190,6 +192,22 @@
     .card-title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
     .card-title { font-size: 16px; font-weight: 700; color: var(--text-main); }
 
+    /* Signup Bonus Promo Strip */
+    .bonus-strip {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 1px solid #F59E0B;
+      color: #78350F;
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
     /* Quick Actions */
     .quick-actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
     .qa-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 2px; border-radius: 14px; cursor: pointer; }
@@ -241,7 +259,18 @@
     }
     .form-control:focus { outline: none; border-color: var(--purple-600); }
 
-    /* Task Banner Cards (Check-in & Lucky Spin — inspired by uploaded screenshots in Purple/Gold) */
+    .input-with-action {
+      display: flex; align-items: center; gap: 8px;
+      border: 1.5px solid #DCDCEB; border-radius: var(--radius-md);
+      background: #FFFFFF; padding: 4px 6px 4px 12px;
+    }
+    .input-with-action:focus-within { border-color: var(--purple-600); }
+    .input-with-action input {
+      flex: 1; border: none; outline: none; font-size: 14.5px; font-weight: 700;
+      padding: 7px 0; min-width: 0; background: transparent;
+    }
+
+    /* Task Banner Cards */
     .activity-banner {
       background: linear-gradient(135deg, #1E1B4B 0%, #3B0764 65%, #581C87 100%);
       color: #FFFFFF;
@@ -322,7 +351,7 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
 
-    /* VIP Node Cards (Inspired by uploaded VIP card in Purple/Gold) */
+    /* VIP Node Cards */
     .vip-card {
       background: linear-gradient(155deg, #1A1438 0%, #2B1759 100%);
       color: #FFFFFF; border-radius: var(--radius-xl); padding: 18px;
@@ -340,19 +369,52 @@
     .vip-progress-track { width: 100%; height: 7px; background: rgba(255,255,255,0.14); border-radius: 999px; overflow: hidden; margin-top: 6px; }
     .vip-progress-fill { height: 100%; background: linear-gradient(90deg, #FDE68A, #F59E0B); border-radius: 999px; }
 
-    /* Coin & Network Selector Pills */
-    .coin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-    .coin-pill {
-      padding: 10px 8px; border-radius: 12px; border: 1.5px solid var(--border-light);
-      background: #FAF9FF; text-align: center; cursor: pointer; font-weight: 700;
-      font-size: 13.5px; color: var(--text-main); font-family: inherit;
+    /* Deposit Channel Selection List */
+    .channel-list { display: flex; flex-direction: column; gap: 10px; }
+    .channel-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 13px 14px; border-radius: 15px; border: 1.5px solid var(--border-light);
+      background: #FAF9FF; cursor: pointer; width: 100%; text-align: left; font-family: inherit;
+      transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
     }
-    .coin-pill.active { border-color: var(--purple-600); background: #F3E8FF; color: var(--purple-800); }
+    .channel-row.active {
+      border-color: var(--purple-600);
+      background: #F3E8FF;
+      box-shadow: 0 4px 14px rgba(109, 40, 217, 0.12);
+    }
+    .channel-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .coin-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 13px; color: #FFFFFF;
+    }
+    .coin-usdt { background: linear-gradient(135deg, #0D9488 0%, #10B981 100%); }
+    .coin-usdc { background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%); }
+    .coin-bnb  { background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%); }
+    .coin-eth  { background: linear-gradient(135deg, #4338CA 0%, #6366F1 100%); }
+    .coin-btc  { background: linear-gradient(135deg, #EA580C 0%, #F97316 100%); }
+    .coin-sol  { background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%); }
+    .coin-def  { background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 100%); }
 
+    .channel-title { font-size: 14.5px; font-weight: 800; color: var(--text-main); }
+    .channel-sub { font-size: 11.5px; color: var(--text-muted); }
+    .channel-radio {
+      width: 20px; height: 20px; border-radius: 50%; border: 2px solid #C4B5FD;
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .channel-row.active .channel-radio {
+      border-color: var(--purple-700); background: var(--purple-700);
+    }
+    .channel-row.active .channel-radio::after {
+      content: ""; width: 7px; height: 7px; border-radius: 50%; background: #FFFFFF;
+    }
+
+    /* Network & Method Pills */
     .net-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
     .net-pill {
       padding: 7px 12px; border-radius: 999px; border: 1.5px solid var(--border-light);
-      background: #FFFFFF; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit;
+      background: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+      color: var(--text-main);
     }
     .net-pill.active { background: var(--purple-700); border-color: var(--purple-700); color: #FFFFFF; }
 
@@ -381,6 +443,36 @@
       padding: 11px 13px; border-radius: 12px; font-size: 12.5px; margin-bottom: 14px;
     }
 
+    /* Team & 3-Level Referral Stats */
+    .team-stats-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px;
+    }
+    .team-stat-box {
+      background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 16px;
+      padding: 13px 8px; text-align: center; box-shadow: var(--shadow-card);
+    }
+    .team-stat-val { font-size: 18px; font-weight: 900; color: var(--purple-900); }
+    .team-stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
+
+    .level-cards-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;
+    }
+    .level-card {
+      background: linear-gradient(150deg, #1E1B4B 0%, #3B0764 100%);
+      color: #FFFFFF; border-radius: 14px; padding: 12px 10px; text-align: center;
+      border: 1px solid rgba(192, 132, 252, 0.3);
+    }
+    .level-card-rate { font-size: 18px; font-weight: 900; color: var(--gold-1); margin: 2px 0; }
+    .level-card-meta { font-size: 11px; color: rgba(255,255,255,0.78); }
+
+    /* Withdraw Rules */
+    .rules-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; color: var(--text-muted); }
+    .rules-list li { display: flex; align-items: flex-start; gap: 8px; }
+    .rule-dot {
+      width: 18px; height: 18px; border-radius: 50%; background: #F3E8FF; color: var(--purple-700);
+      font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+
     .list-item {
       display: flex; align-items: center; justify-content: space-between;
       gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-light);
@@ -399,7 +491,7 @@
     /* Tabs */
     .tab-bar { display: flex; gap: 5px; background: #ECEAF7; padding: 5px; border-radius: var(--radius-md); margin-bottom: 14px; flex-wrap: wrap; }
     .tab-btn {
-      flex: 1; min-width: 68px; border: none; background: transparent; padding: 8px 6px; border-radius: 9px;
+      flex: 1; min-width: 64px; border: none; background: transparent; padding: 8px 6px; border-radius: 9px;
       font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; font-family: inherit;
     }
     .tab-btn.active { background: #FFFFFF; color: var(--purple-700); box-shadow: 0 2px 8px rgba(46, 16, 101, 0.08); }
@@ -411,7 +503,7 @@
       min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
       padding: 24px 18px; max-width: 460px; margin: 0 auto;
     }
-    .auth-brand-head { text-align: center; margin-bottom: 20px; }
+    .auth-brand-head { text-align: center; margin-bottom: 18px; }
     .auth-logo-lg {
       width: 64px; height: 64px; border-radius: 20px;
       background: linear-gradient(135deg, #4C1D95 0%, #9333EA 100%);
@@ -467,6 +559,11 @@
       <div class="auth-logo-lg">N</div>
       <h1 style="font-size:24px; font-weight:800; color:var(--purple-900);">Nexbitra</h1>
       <p style="font-size:13.5px; color:var(--text-muted);">Sign in to your Nexbitra USDT Account</p>
+    </div>
+
+    <div class="bonus-strip">
+      <span>🎁 New User Signup Bonus: <strong>+5.00 USDT</strong></span>
+      <span class="badge-soft badge-purple">Unlock $5 Plan</span>
     </div>
 
     <div class="card" style="margin-top:0;">
@@ -527,7 +624,11 @@
             <label class="form-label" for="regConfirm">Confirm Password</label>
             <input type="password" id="regConfirm" class="form-control" placeholder="Repeat password" required minlength="6">
           </div>
-          <button type="submit" id="registerSubmitBtn" class="btn btn-primary">Create Nexbitra Account</button>
+          <div class="form-group">
+            <label class="form-label" for="regInviteCode">Invite Code (Optional)</label>
+            <input type="text" id="regInviteCode" class="form-control" placeholder="e.g., NXB123456">
+          </div>
+          <button type="submit" id="registerSubmitBtn" class="btn btn-primary">Create Account (+5.00 USDT Bonus)</button>
         </form>
       </div>
 
@@ -563,6 +664,7 @@
   <input type="radio" name="page" id="route-vip" class="page-radio">
   <input type="radio" name="page" id="route-me" class="page-radio">
   <input type="radio" name="page" id="route-wallet" class="page-radio">
+  <input type="radio" name="page" id="route-withdraw" class="page-radio">
   <input type="radio" name="page" id="route-records" class="page-radio">
   <input type="radio" name="page" id="route-password" class="page-radio">
   <input type="radio" name="page" id="route-support" class="page-radio">
@@ -570,7 +672,7 @@
 
   <div class="app-shell">
 
-    <!-- Admin Email Verification Banner (Shown ONLY to unverified marufbro360x@gmail.com) -->
+    <!-- Admin Email Verification Banner -->
     <div id="adminVerifyBanner" style="display:none; padding:12px 16px 0;">
       <div class="warning-box" style="margin-bottom:0;">
         <strong>Admin Email Verification Required:</strong> Please verify ownership of <code>marufbro360x@gmail.com</code> to unlock full Admin Panel access.
@@ -582,7 +684,7 @@
     </div>
 
     <!-- ===================================================================
-         1. HOME PAGE (Clean Live USDT Balance)
+         1. HOME PAGE
          =================================================================== -->
     <section id="page-home" class="page-section">
       <header class="hero-header">
@@ -625,19 +727,19 @@
         <!-- Quick Actions -->
         <div class="card">
           <div class="quick-actions-grid">
-            <label for="route-me" class="qa-item">
+            <label for="route-vip" class="qa-item">
               <span class="qa-circle c-blue">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M16 12h2"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               </span>
-              <span class="qa-label">Account</span>
+              <span class="qa-label">VIP Plans</span>
             </label>
             <label for="route-wallet" class="qa-item">
               <span class="qa-circle c-rose">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
               </span>
-              <span class="qa-label">Recharge</span>
+              <span class="qa-label">Deposit</span>
             </label>
-            <label for="route-support" class="qa-item">
+            <label for="route-withdraw" class="qa-item">
               <span class="qa-circle c-mint">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M12 3v8"/><path d="M9 8l3 3 3-3"/></svg>
               </span>
@@ -652,12 +754,24 @@
           </div>
         </div>
 
-        <!-- Verified Admin Shortcut (Hidden for regular users) -->
+        <!-- Starter Plan Promo Banner -->
+        <div class="card" style="background:linear-gradient(135deg, #2E1065 0%, #6D28D9 100%); color:#FFFFFF; border:none;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div>
+              <div style="font-size:11px; font-weight:800; color:var(--gold-1); letter-spacing:0.8px;">$5.00 SIGNUP BONUS READY</div>
+              <div style="font-size:16px; font-weight:800; margin:2px 0;">Activate Starter Plan ($5.00)</div>
+              <div style="font-size:12px; color:#E9D5FF;">Use your $5 signup bonus to start earning daily USDT.</div>
+            </div>
+            <label for="route-vip" class="btn btn-gold btn-sm">Open VIP</label>
+          </div>
+        </div>
+
+        <!-- Verified Admin Shortcut -->
         <div id="homeAdminShortcut" class="card" style="display:none; background:linear-gradient(135deg, #1A0B3B 0%, #5B21B6 100%); color:#fff;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
             <div>
               <div style="font-weight:800; font-size:15px;">Nexbitra Admin Panel</div>
-              <div style="font-size:12px; color:#E9D5FF;">Full Control: Deposits, VIP Plans, Coins, Users &amp; Audit</div>
+              <div style="font-size:12px; color:#E9D5FF;">Deposits, Withdraws, VIP Plans, Coins, Users &amp; Audit</div>
             </div>
             <label for="route-admin" class="btn btn-gold btn-sm">Open Admin</label>
           </div>
@@ -685,7 +799,7 @@
         <div class="card">
           <div class="card-title-row">
             <h2 class="card-title">Recent Deposit Requests</h2>
-            <label for="route-wallet" class="badge-soft badge-purple" style="cursor:pointer;">+ Recharge</label>
+            <label for="route-wallet" class="badge-soft badge-purple" style="cursor:pointer;">+ Deposit</label>
           </div>
           <div id="homeRecentDeposits">
             <p style="font-size:13px; color:var(--text-muted);">No deposit requests submitted yet.</p>
@@ -695,7 +809,7 @@
     </section>
 
     <!-- ===================================================================
-         2. TASK CENTER (01 Daily Check-in + 02 Lucky Spin in USDT)
+         2. TASK CENTER
          =================================================================== -->
     <section id="page-task" class="page-section">
       <header class="hero-header compact">
@@ -735,7 +849,7 @@
     </section>
 
     <!-- ===================================================================
-         2A. DAILY CHECK-IN PAGE (Direct USDT Rewards)
+         2A. DAILY CHECK-IN PAGE
          =================================================================== -->
     <section id="page-checkin" class="page-section">
       <header class="hero-header compact">
@@ -794,7 +908,7 @@
     </section>
 
     <!-- ===================================================================
-         2B. LUCKY SPIN PAGE (Animated USDT Wheel)
+         2B. LUCKY SPIN PAGE
          =================================================================== -->
     <section id="page-spin" class="page-section">
       <header class="hero-header compact">
@@ -842,39 +956,102 @@
     </section>
 
     <!-- ===================================================================
-         3. TEAM / REFERRAL PAGE
+         3. TEAM / 3-LEVEL REFERRAL DASHBOARD
          =================================================================== -->
     <section id="page-team" class="page-section">
       <header class="hero-header compact">
         <div class="top-bar">
           <label for="route-home" class="icon-circle-btn">&larr;</label>
           <div class="brand-lockup"><span class="brand-name">Team &amp; Referral</span></div>
-          <span class="pill-btn">Invite</span>
+          <span class="pill-btn">3 Levels</span>
         </div>
+        <p style="font-size:12.5px; color:rgba(255,255,255,0.88);">Invite friends and earn up to 17% total USDT commission across 3 team levels.</p>
       </header>
       <main class="page-content">
+        <!-- Invite Code & Link -->
         <div class="card">
-          <h2 class="card-title" style="margin-bottom:12px;">Your Referral Link</h2>
+          <h2 class="card-title" style="margin-bottom:12px;">Your Invitation Details</h2>
           <div class="form-group">
-            <label class="form-label" for="refCodeInput">Referral Code</label>
+            <label class="form-label" for="refCodeInput">Invitation Code</label>
             <div class="copy-box">
               <input type="text" id="refCodeInput" value="" readonly>
               <button type="button" class="btn btn-primary btn-sm" data-copy="refCodeInput">Copy</button>
             </div>
           </div>
           <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label" for="refLinkInput">Invite Link</label>
+            <label class="form-label" for="refLinkInput">Referral Share Link</label>
             <div class="copy-box">
               <input type="text" id="refLinkInput" value="" readonly>
               <button type="button" class="btn btn-primary btn-sm" data-copy="refLinkInput">Copy</button>
             </div>
           </div>
         </div>
+
+        <!-- Team Stats Overview -->
+        <div class="team-stats-grid">
+          <div class="team-stat-box">
+            <div class="team-stat-val" id="teamTotalMembers">0</div>
+            <div class="team-stat-lbl">Team Size</div>
+          </div>
+          <div class="team-stat-box">
+            <div class="team-stat-val" id="teamTotalRecharge">$0.00</div>
+            <div class="team-stat-lbl">Team Recharge</div>
+          </div>
+          <div class="team-stat-box">
+            <div class="team-stat-val" style="color:#059669;" id="teamTotalCommission">$0.00</div>
+            <div class="team-stat-lbl">Commission</div>
+          </div>
+        </div>
+
+        <!-- 3-Level Breakdown & Member Tabs -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">3-Level Referral Dashboard</h2>
+            <span class="badge-soft badge-purple">10% / 5% / 2%</span>
+          </div>
+
+          <div class="level-cards-grid">
+            <div class="level-card">
+              <div style="font-size:11px; font-weight:700; color:#E9D5FF;">Level 1</div>
+              <div class="level-card-rate">10%</div>
+              <div class="level-card-meta"><strong id="l1Count">0</strong> Members</div>
+              <div class="level-card-meta" id="l1Deposit">$0.00 Dep</div>
+            </div>
+            <div class="level-card">
+              <div style="font-size:11px; font-weight:700; color:#E9D5FF;">Level 2</div>
+              <div class="level-card-rate">5%</div>
+              <div class="level-card-meta"><strong id="l2Count">0</strong> Members</div>
+              <div class="level-card-meta" id="l2Deposit">$0.00 Dep</div>
+            </div>
+            <div class="level-card">
+              <div style="font-size:11px; font-weight:700; color:#E9D5FF;">Level 3</div>
+              <div class="level-card-rate">2%</div>
+              <div class="level-card-meta"><strong id="l3Count">0</strong> Members</div>
+              <div class="level-card-meta" id="l3Deposit">$0.00 Dep</div>
+            </div>
+          </div>
+
+          <div class="tab-bar" role="tablist">
+            <button type="button" class="tab-btn active" data-team-tab="teamL1Panel">Level 1 (10%)</button>
+            <button type="button" class="tab-btn" data-team-tab="teamL2Panel">Level 2 (5%)</button>
+            <button type="button" class="tab-btn" data-team-tab="teamL3Panel">Level 3 (2%)</button>
+          </div>
+
+          <div id="teamL1Panel" class="tab-panel active">
+            <div id="teamL1List"><p style="font-size:13px; color:var(--text-muted);">No Level 1 members yet. Share your link to build your team!</p></div>
+          </div>
+          <div id="teamL2Panel" class="tab-panel">
+            <div id="teamL2List"><p style="font-size:13px; color:var(--text-muted);">No Level 2 members yet.</p></div>
+          </div>
+          <div id="teamL3Panel" class="tab-panel">
+            <div id="teamL3List"><p style="font-size:13px; color:var(--text-muted);">No Level 3 members yet.</p></div>
+          </div>
+        </div>
       </main>
     </section>
 
     <!-- ===================================================================
-         4. VIP PLANS PAGE (Dynamic Plans Posted from Admin Panel)
+         4. VIP PLANS PAGE (Starts at $5 — Purchasable with $5 Signup Bonus)
          =================================================================== -->
     <section id="page-vip" class="page-section">
       <header class="hero-header compact">
@@ -883,9 +1060,19 @@
           <div class="brand-lockup"><span class="brand-name">VIP Plans</span></div>
           <span class="pill-btn" id="vipBalancePill">0.00 USDT</span>
         </div>
-        <p style="font-size:12.5px; color:rgba(255,255,255,0.88);">Select an active VIP node plan posted by Nexbitra Admin.</p>
+        <p style="font-size:12.5px; color:rgba(255,255,255,0.88);">Start from just $5.00 USDT using your Signup Bonus and claim daily rewards.</p>
       </header>
       <main class="page-content">
+        <!-- User Active VIP Plans (Daily Claim) -->
+        <div id="myActivePlansCard" class="card" style="display:none;">
+          <div class="card-title-row">
+            <h2 class="card-title">My Active Mining Plans</h2>
+            <span class="badge-soft badge-green" id="activePlansCount">0 Active</span>
+          </div>
+          <div id="myActivePlansList"></div>
+        </div>
+
+        <!-- Available VIP Plans -->
         <div id="userVipPlansList">
           <div class="card">
             <p style="font-size:13.5px; color:var(--text-muted);">Loading VIP plans...</p>
@@ -945,9 +1132,9 @@
               <span class="qa-circle c-rose">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
               </span>
-              <span class="qa-label">Recharge</span>
+              <span class="qa-label">Deposit</span>
             </label>
-            <label for="route-support" class="qa-item">
+            <label for="route-withdraw" class="qa-item">
               <span class="qa-circle c-mint">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M12 3v8"/><path d="M9 8l3 3 3-3"/></svg>
               </span>
@@ -979,7 +1166,17 @@
                 <span class="menu-icon-circle">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 10H3l4-4"/><path d="M7 14h14l-4 4"/></svg>
                 </span>
-                <span class="menu-row-text">Crypto Recharge</span>
+                <span class="menu-row-text">Crypto Deposit</span>
+              </span>
+              <span class="menu-arrow">&rarr;</span>
+            </label>
+
+            <label for="route-withdraw" class="menu-row">
+              <span class="menu-row-left">
+                <span class="menu-icon-circle" style="background:#E9F9F1; color:#16A34A;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M12 3v8"/><path d="M9 8l3 3 3-3"/></svg>
+                </span>
+                <span class="menu-row-text">Withdraw USDT</span>
               </span>
               <span class="menu-arrow">&rarr;</span>
             </label>
@@ -1009,60 +1206,65 @@
     </section>
 
     <!-- ===================================================================
-         6. USER CRYPTO RECHARGE PAGE
+         6. CRYPTO DEPOSIT PAGE (Currency/Network Selection List)
          =================================================================== -->
     <section id="page-wallet" class="page-section">
       <header class="hero-header compact">
         <div class="top-bar">
           <label for="route-home" class="icon-circle-btn">&larr;</label>
-          <div class="brand-lockup"><span class="brand-name">Crypto Recharge</span></div>
-          <span class="pill-btn">USDT</span>
+          <div class="brand-lockup"><span class="brand-name">Deposit</span></div>
+          <span class="pill-btn">Crypto</span>
         </div>
-        <p style="font-size:12.5px; color:rgba(255,255,255,0.88);">Select coin &amp; network, copy wallet address or scan QR, and submit your TXID.</p>
+        <p style="font-size:12.5px; color:rgba(255,255,255,0.88);">Select a currency &amp; network below, transfer funds, and submit your TXID.</p>
       </header>
 
       <main class="page-content">
         <div class="card">
-          <h2 class="card-title" style="margin-bottom:10px;">1. Select Cryptocurrency</h2>
-          <div id="userCoinSelector" class="coin-grid">
-            <div style="grid-column:1/-1; font-size:13px; color:var(--text-muted);">Loading supported cryptocurrencies...</div>
+          <div class="card-title-row">
+            <h2 class="card-title">Select Currency &amp; Network</h2>
+            <span class="badge-soft badge-purple" id="depositChannelCount">0 Channels</span>
+          </div>
+          <div id="userCoinSelector" class="channel-list">
+            <p style="font-size:13px; color:var(--text-muted);">Loading deposit channels...</p>
+          </div>
+        </div>
+
+        <div id="rechargeDetailsWrap" class="card" style="display:none;">
+          <div class="card-title-row">
+            <h2 class="card-title" id="selectedChannelHeading">Deposit Details</h2>
+            <span class="badge-soft badge-green" id="selectedChannelBadge">ACTIVE</span>
           </div>
 
-          <div id="rechargeDetailsWrap" style="display:none;">
-            <h2 class="card-title" style="margin-bottom:8px;">2. Select Blockchain Network</h2>
-            <div id="userNetworkSelector" class="net-pills"></div>
+          <div class="warning-box">
+            <strong>Network Warning:</strong> Send ONLY <strong id="warnCoin">USDT</strong> via <strong id="warnNetwork">—</strong>. Sending funds via any other network will result in permanent loss.
+          </div>
 
-            <div class="warning-box">
-              <strong>Network Warning:</strong> Send ONLY <strong id="warnCoin">USDT</strong> via <strong id="warnNetwork">—</strong>. Sending funds on an incompatible network will result in permanent loss.
+          <div class="qr-box">
+            <div id="userQrContainer"></div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">
+              Deposit Limits: <strong id="coinLimitsText">Min 5.00 — Max 50,000.00 USDT</strong>
             </div>
+          </div>
 
-            <div class="qr-box">
-              <div id="userQrContainer"></div>
-              <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">
-                Deposit Limits: <strong id="coinLimitsText">Min 10 — Max 50,000 USDT</strong>
-              </div>
+          <div class="form-group">
+            <label class="form-label" for="depositWalletAddr">Deposit Address (<span id="addrNetworkLabel">—</span>)</label>
+            <div class="copy-box">
+              <input type="text" id="depositWalletAddr" readonly value="">
+              <button type="button" class="btn btn-primary btn-sm" data-copy="depositWalletAddr">Copy</button>
             </div>
+          </div>
 
+          <form id="cryptoDepositForm">
             <div class="form-group">
-              <label class="form-label" for="depositWalletAddr">Wallet Address (<span id="addrNetworkLabel">—</span>)</label>
-              <div class="copy-box">
-                <input type="text" id="depositWalletAddr" readonly value="">
-                <button type="button" class="btn btn-primary btn-sm" data-copy="depositWalletAddr">Copy</button>
-              </div>
+              <label class="form-label" for="depositAmountInput">Deposit Amount (USDT Equivalent)</label>
+              <input type="number" step="0.01" id="depositAmountInput" class="form-control" placeholder="e.g., 20.00" required>
             </div>
-
-            <form id="cryptoDepositForm">
-              <div class="form-group">
-                <label class="form-label" for="depositAmountInput">Deposit Amount (USDT Equivalent)</label>
-                <input type="number" step="0.01" id="depositAmountInput" class="form-control" placeholder="e.g., 50.00" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="depositTxidInput">Transaction Hash (TXID)</label>
-                <input type="text" id="depositTxidInput" class="form-control" placeholder="Paste full blockchain TXID" required minlength="10">
-              </div>
-              <button type="submit" id="submitDepositBtn" class="btn btn-neon">Submit Deposit Request</button>
-            </form>
-          </div>
+            <div class="form-group">
+              <label class="form-label" for="depositTxidInput">Transaction Hash (TXID)</label>
+              <input type="text" id="depositTxidInput" class="form-control" placeholder="Paste full blockchain TXID" required minlength="10">
+            </div>
+            <button type="submit" id="submitDepositBtn" class="btn btn-neon">Submit Deposit Request</button>
+          </form>
         </div>
 
         <div class="card">
@@ -1072,6 +1274,98 @@
           </div>
           <div id="userDepositList">
             <p style="font-size:13px; color:var(--text-muted);">No deposits submitted yet.</p>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- ===================================================================
+         6B. WITHDRAW PAGE (Method, Amount, Wallet, Security Password & Rules)
+         =================================================================== -->
+    <section id="page-withdraw" class="page-section">
+      <header class="hero-header compact">
+        <div class="top-bar">
+          <label for="route-home" class="icon-circle-btn">&larr;</label>
+          <div class="brand-lockup"><span class="brand-name">Withdraw</span></div>
+          <span class="pill-btn">USDT Payout</span>
+        </div>
+        <p style="font-size:12.5px; color:rgba(255,255,255,0.88);">Request fast USDT withdrawals directly to your crypto wallet.</p>
+      </header>
+
+      <main class="page-content">
+        <div class="balance-card-dark" style="margin-top:14px;">
+          <div class="balance-col">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-value" id="withdrawAvailBalance">0.00</div>
+            <div class="balance-sub">USDT</div>
+          </div>
+          <div class="balance-col">
+            <div class="balance-label">Total Withdrawn</div>
+            <div class="balance-value" id="withdrawTotalPaid">0.00</div>
+            <div class="balance-sub">Approved Payouts</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:10px;">Select Withdrawal Method</h2>
+          <div id="withdrawMethodPills" class="net-pills">
+            <button type="button" class="net-pill active" data-wd-method="TRC20-USDT">TRC20-USDT</button>
+            <button type="button" class="net-pill" data-wd-method="BEP20-USDT">BEP20-USDT</button>
+            <button type="button" class="net-pill" data-wd-method="POLYGON-USDT">POLYGON-USDT</button>
+            <button type="button" class="net-pill" data-wd-method="ERC20-USDC">ERC20-USDC</button>
+            <button type="button" class="net-pill" data-wd-method="BEP20-BNB">BEP20-BNB</button>
+          </div>
+
+          <form id="withdrawForm">
+            <div class="form-group">
+              <label class="form-label" for="withdrawAmountInput">Withdrawal Amount (USDT)</label>
+              <div class="input-with-action">
+                <input type="number" step="0.01" min="5" id="withdrawAmountInput" placeholder="Min 5.00 USDT" required>
+                <button type="button" id="withdrawAllBtn" class="btn btn-outline-soft btn-sm">ALL</button>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-muted); margin-top:5px;">
+                <span>Fee (5%): <strong id="withdrawFeePreview">0.00 USDT</strong></span>
+                <span>You Receive: <strong style="color:#059669;" id="withdrawNetPreview">0.00 USDT</strong></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="withdrawAddressInput">Receiving Wallet Address (<span id="withdrawMethodLabel">TRC20-USDT</span>)</label>
+              <input type="text" id="withdrawAddressInput" class="form-control" placeholder="Paste your receiving wallet address" required minlength="16">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="withdrawPasswordInput">Security / Account Password</label>
+              <input type="password" id="withdrawPasswordInput" class="form-control" placeholder="Enter your security password (min 6 chars)" required minlength="6">
+              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;" id="withdrawPinHint">
+                First-time withdrawal saves this as your Withdrawal Security Password.
+              </div>
+            </div>
+
+            <button type="submit" id="submitWithdrawBtn" class="btn btn-primary">Confirm Withdrawal</button>
+          </form>
+        </div>
+
+        <!-- Withdrawal Rules -->
+        <div class="card">
+          <h2 class="card-title" style="margin-bottom:10px;">Withdrawal Rules</h2>
+          <ul class="rules-list">
+            <li><span class="rule-dot">1</span><span>Minimum withdrawal amount is <strong>5.00 USDT</strong>.</span></li>
+            <li><span class="rule-dot">2</span><span>A standard <strong>5% network &amp; processing fee</strong> applies to every payout.</span></li>
+            <li><span class="rule-dot">3</span><span>Withdrawals are processed within <strong>5–30 minutes</strong> (up to 24 hours during peak network load).</span></li>
+            <li><span class="rule-dot">4</span><span>Please verify your selected network and wallet address carefully; incorrect addresses cannot be recovered.</span></li>
+            <li><span class="rule-dot">5</span><span>If a withdrawal request is rejected by Admin, the full requested USDT amount is refunded to your balance automatically.</span></li>
+          </ul>
+        </div>
+
+        <!-- User Withdrawal History -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">My Withdrawal History</h2>
+            <span class="badge-soft badge-purple" id="myWithdrawCount">0</span>
+          </div>
+          <div id="userWithdrawList">
+            <p style="font-size:13px; color:var(--text-muted);">No withdrawal requests yet.</p>
           </div>
         </div>
       </main>
@@ -1147,7 +1441,7 @@
           <form id="supportForm">
             <div class="form-group">
               <label class="form-label" for="supportSubject">Subject</label>
-              <input type="text" id="supportSubject" class="form-control" placeholder="e.g., Deposit or VIP inquiry" required>
+              <input type="text" id="supportSubject" class="form-control" placeholder="e.g., Deposit, Withdraw or VIP inquiry" required>
             </div>
             <div class="form-group">
               <label class="form-label" for="supportMessage">Message</label>
@@ -1176,6 +1470,7 @@
         <div class="card">
           <div class="tab-bar">
             <button type="button" class="tab-btn active" data-admin-tab="adminDepositsPanel">Deposits</button>
+            <button type="button" class="tab-btn" data-admin-tab="adminWithdrawsPanel">Withdraws</button>
             <button type="button" class="tab-btn" data-admin-tab="adminVipPanel">VIP Plans</button>
             <button type="button" class="tab-btn" data-admin-tab="adminCoinsPanel">Coins &amp; QR</button>
             <button type="button" class="tab-btn" data-admin-tab="adminUsersPanel">Users</button>
@@ -1198,11 +1493,27 @@
             </div>
           </div>
 
-          <!-- ADMIN TAB 2: POST & MANAGE VIP PLANS -->
+          <!-- ADMIN TAB 2: WITHDRAW REQUESTS -->
+          <div id="adminWithdrawsPanel" class="tab-panel">
+            <div class="form-group">
+              <input type="text" id="adminWdSearch" class="form-control" placeholder="Search withdrawals by Email or Wallet Address...">
+            </div>
+            <div style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
+              <button type="button" class="net-pill active" data-wd-filter="all">All</button>
+              <button type="button" class="net-pill" data-wd-filter="pending">Pending</button>
+              <button type="button" class="net-pill" data-wd-filter="approved">Approved</button>
+              <button type="button" class="net-pill" data-wd-filter="rejected">Rejected</button>
+            </div>
+            <div id="adminWithdrawList">
+              <p style="font-size:13px; color:var(--text-muted);">Loading withdrawal requests...</p>
+            </div>
+          </div>
+
+          <!-- ADMIN TAB 3: POST, EDIT & REMOVE VIP PLANS -->
           <div id="adminVipPanel" class="tab-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
-              <strong style="font-size:14px;">VIP Plan Publisher</strong>
-              <button type="button" id="seedVipPlansBtn" class="btn btn-outline-soft btn-sm">Seed 3 Default VIPs</button>
+              <strong style="font-size:14px;">VIP Plan Manager (Post / Edit / Remove)</strong>
+              <button type="button" id="seedVipPlansBtn" class="btn btn-outline-soft btn-sm">Seed 4 Plans ($5–$50)</button>
             </div>
 
             <form id="adminVipForm" style="background:#FAF9FF; border:1px solid #E8E4FA; border-radius:14px; padding:14px; margin-bottom:16px;">
@@ -1212,19 +1523,19 @@
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                 <div class="form-group">
                   <label class="form-label" for="vipNameInput">Plan Name</label>
-                  <input type="text" id="vipNameInput" class="form-control" placeholder="e.g., Node S / VIP 1" required>
+                  <input type="text" id="vipNameInput" class="form-control" placeholder="e.g., Starter Node" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="vipBadgeInput">Tier Badge</label>
-                  <input type="text" id="vipBadgeInput" class="form-control" placeholder="e.g., V1" required>
+                  <input type="text" id="vipBadgeInput" class="form-control" placeholder="e.g., VIP 1" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="vipPriceInput">Price (USDT)</label>
-                  <input type="number" step="0.01" id="vipPriceInput" class="form-control" placeholder="12.00" required>
+                  <input type="number" step="0.01" id="vipPriceInput" class="form-control" placeholder="5.00" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="vipDailyInput">Daily Reward (USDT)</label>
-                  <input type="number" step="0.01" id="vipDailyInput" class="form-control" placeholder="0.50" required>
+                  <input type="number" step="0.01" id="vipDailyInput" class="form-control" placeholder="0.40" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="vipDaysInput">Duration (Days)</label>
@@ -1232,13 +1543,13 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="vipProgressInput">Sale Progress (%)</label>
-                  <input type="number" min="0" max="100" id="vipProgressInput" class="form-control" value="35" required>
+                  <input type="number" min="0" max="100" id="vipProgressInput" class="form-control" value="30" required>
                 </div>
               </div>
 
               <div class="form-group">
                 <label class="form-label" for="vipDescInput">Short Description / Features</label>
-                <input type="text" id="vipDescInput" class="form-control" placeholder="Daily USDT node mining reward + VIP badge" required>
+                <input type="text" id="vipDescInput" class="form-control" placeholder="Starter plan purchasable with $5 signup bonus" required>
               </div>
 
               <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;">
@@ -1256,16 +1567,16 @@
             </div>
           </div>
 
-          <!-- ADMIN TAB 3: COINS & QR -->
+          <!-- ADMIN TAB 4: DEPOSIT CHANNELS (COINS & QR) -->
           <div id="adminCoinsPanel" class="tab-panel">
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
-              <strong style="font-size:14px;">Crypto Recharge Coins</strong>
-              <button type="button" id="seedDefaultCoinsBtn" class="btn btn-outline-soft btn-sm">Seed 6 Coins</button>
+              <strong style="font-size:14px;">Deposit Channels (Coin &amp; Network)</strong>
+              <button type="button" id="seedDefaultCoinsBtn" class="btn btn-outline-soft btn-sm">Seed 6 Channels</button>
             </div>
 
             <form id="adminCoinForm" style="background:#FAF9FF; border:1px solid #E8E4FA; border-radius:14px; padding:14px; margin-bottom:16px;">
               <input type="hidden" id="editCoinId" value="">
-              <h3 style="font-size:14.5px; font-weight:800; color:var(--purple-900); margin-bottom:10px;" id="coinFormHeading">Add / Edit Cryptocurrency</h3>
+              <h3 style="font-size:14.5px; font-weight:800; color:var(--purple-900); margin-bottom:10px;" id="coinFormHeading">Add / Edit Deposit Channel</h3>
 
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                 <div class="form-group">
@@ -1273,12 +1584,20 @@
                   <input type="text" id="coinSymbolInput" class="form-control" placeholder="USDT" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="coinNameInput">Coin Name</label>
-                  <input type="text" id="coinNameInput" class="form-control" placeholder="Tether USD" required>
+                  <label class="form-label" for="coinNetworkInput">Network</label>
+                  <input type="text" id="coinNetworkInput" class="form-control" placeholder="BEP20 / TRC20 / POLYGON" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="coinNameInput">Display Label</label>
+                  <input type="text" id="coinNameInput" class="form-control" placeholder="BEP20-USDT" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="coinSubInput">Subtitle / Chain</label>
+                  <input type="text" id="coinSubInput" class="form-control" placeholder="BNB Smart Chain">
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="coinMinInput">Min Deposit (USDT)</label>
-                  <input type="number" step="0.01" id="coinMinInput" class="form-control" value="10" required>
+                  <input type="number" step="0.01" id="coinMinInput" class="form-control" value="5" required>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="coinMaxInput">Max Deposit (USDT)</label>
@@ -1287,12 +1606,8 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="coinNetworkInput">Blockchain Network</label>
-                <input type="text" id="coinNetworkInput" class="form-control" placeholder="TRC20 / BEP20 / ERC20" required>
-              </div>
-              <div class="form-group">
                 <label class="form-label" for="coinAddressInput">Dedicated Wallet Address</label>
-                <input type="text" id="coinAddressInput" class="form-control" placeholder="Enter wallet address for this network" required>
+                <input type="text" id="coinAddressInput" class="form-control" placeholder="Enter wallet address for this channel" required>
               </div>
               <div class="form-group">
                 <label class="form-label" for="coinQrUpload">Upload QR Code Image (Optional)</label>
@@ -1302,18 +1617,18 @@
 
               <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px;">
                 <label style="font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px;">
-                  <input type="checkbox" id="coinEnabledInput" checked> Coin Enabled
+                  <input type="checkbox" id="coinEnabledInput" checked> Channel Enabled
                 </label>
                 <button type="button" id="cancelEditCoinBtn" class="btn btn-outline-soft btn-sm" style="display:none;">Cancel</button>
               </div>
 
-              <button type="submit" id="saveCoinBtn" class="btn btn-primary">Save Cryptocurrency</button>
+              <button type="submit" id="saveCoinBtn" class="btn btn-primary">Save Deposit Channel</button>
             </form>
 
             <div id="adminCoinsList"></div>
           </div>
 
-          <!-- ADMIN TAB 4: FULL USER MANAGEMENT -->
+          <!-- ADMIN TAB 5: FULL USER MANAGEMENT -->
           <div id="adminUsersPanel" class="tab-panel">
             <div class="form-group">
               <input type="text" id="adminUserSearch" class="form-control" placeholder="Search users by email or username...">
@@ -1323,7 +1638,7 @@
             </div>
           </div>
 
-          <!-- ADMIN TAB 5: AUDIT LOGS -->
+          <!-- ADMIN TAB 6: AUDIT LOGS -->
           <div id="adminAuditPanel" class="tab-panel">
             <h3 style="font-size:14.5px; font-weight:800; margin-bottom:10px;">Immutable Admin Audit Log</h3>
             <div id="adminAuditList">
@@ -1361,7 +1676,7 @@
   </nav>
 
   <!-- =====================================================================
-       FIREBASE AUTH + FIRESTORE LIVE ENGINE (USDT, VIP, CHECK-IN, SPIN, ADMIN)
+       FIREBASE AUTH + FIRESTORE LIVE ENGINE
        ===================================================================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -1386,6 +1701,7 @@
       getFirestore,
       doc,
       getDoc,
+      getDocs,
       setDoc,
       updateDoc,
       deleteDoc,
@@ -1400,6 +1716,10 @@
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
     const ADMIN_EMAIL = "marufbro360x@gmail.com";
+    const SIGNUP_BONUS_USDT = 5.00;
+    const MIN_WITHDRAW_USDT = 5.00;
+    const WITHDRAW_FEE_RATE = 0.05;
+    const REF_RATES = { l1: 0.10, l2: 0.05, l3: 0.02 };
 
     const firebaseConfig = {
       apiKey: "AIzaSyAWA6ymvIY3HIosNon075PMc4MayK7TvO0",
@@ -1416,10 +1736,8 @@
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Daily Check-in 6-Day Direct USDT Ladder
     const CHECKIN_REWARDS = [0.10, 0.20, 0.30, 0.50, 0.75, 1.00];
 
-    // Lucky Spin Wheel Direct USDT Prizes (Weighted probabilities)
     const SPIN_PRIZES = [
       { label: "0.10", amount: 0.10, weight: 32, color: "#2E1065" },
       { label: "0.25", amount: 0.25, weight: 25, color: "#4C1D95" },
@@ -1433,19 +1751,62 @@
       { label: "100",  amount: 100,  weight: 0.1,color: "#6D28D9" }
     ];
 
+    // Lower-priced default VIP plans starting at $5.00 (purchasable with $5 signup bonus)
+    const DEFAULT_VIPS = [
+      { id: "vip_starter_5", name: "Starter Node", badge: "VIP 1", price: 5, dailyReward: 0.40, durationDays: 30, saleProgress: 28, description: "Entry node — activate immediately with your $5.00 Signup Bonus.", enabled: true },
+      { id: "vip_growth_12", name: "Growth Node",  badge: "VIP 2", price: 12, dailyReward: 1.10, durationDays: 45, saleProgress: 44, description: "Affordable daily USDT mining output with faster returns.", enabled: true },
+      { id: "vip_pro_25",    name: "Pro Node",     badge: "VIP 3", price: 25, dailyReward: 2.50, durationDays: 60, saleProgress: 61, description: "High-efficiency mining node with priority payouts.", enabled: true },
+      { id: "vip_elite_50",  name: "Elite Node",   badge: "VIP 4", price: 50, dailyReward: 5.50, durationDays: 90, saleProgress: 74, description: "Top-tier virtual mining node with maximum daily USDT yield.", enabled: true }
+    ];
+
+    // Dedicated currency/network deposit channels
+    const DEFAULT_CHANNELS = [
+      { id: "bep20_usdt",   symbol: "USDT", network: "BEP20",   name: "BEP20-USDT",   subtitle: "Tether USD • BNB Smart Chain", minDeposit: 5, maxDeposit: 50000, enabled: true, address: "0xReplaceWithYourBEP20USDTAddress01", qrDataUrl: "" },
+      { id: "trc20_usdt",   symbol: "USDT", network: "TRC20",   name: "TRC20-USDT",   subtitle: "Tether USD • Tron Network",    minDeposit: 5, maxDeposit: 50000, enabled: true, address: "TReplaceWithYourTRC20USDTAddress02",  qrDataUrl: "" },
+      { id: "polygon_usdt", symbol: "USDT", network: "POLYGON", name: "POLYGON-USDT", subtitle: "Tether USD • Polygon POS",     minDeposit: 5, maxDeposit: 50000, enabled: true, address: "0xReplaceWithYourPolygonUSDTAddr03", qrDataUrl: "" },
+      { id: "erc20_usdc",   symbol: "USDC", network: "ERC20",   name: "ERC20-USDC",   subtitle: "USD Coin • Ethereum Network",  minDeposit: 5, maxDeposit: 50000, enabled: true, address: "0xReplaceWithYourUSDCAddress000004", qrDataUrl: "" },
+      { id: "bep20_bnb",    symbol: "BNB",  network: "BEP20",   name: "BEP20-BNB",    subtitle: "BNB Smart Chain",              minDeposit: 5, maxDeposit: 50000, enabled: true, address: "0xReplaceWithYourBNBAddress0000005", qrDataUrl: "" },
+      { id: "erc20_eth",    symbol: "ETH",  network: "ERC20",   name: "ERC20-ETH",    subtitle: "Ethereum Network",             minDeposit: 5, maxDeposit: 50000, enabled: true, address: "0xReplaceWithYourETHAddress0000006", qrDataUrl: "" }
+    ];
+
     let confirmationResult = null;
     let recaptchaVerifier = null;
     let activeUnsubs = [];
     let currentUserData = null;
     let allCoins = [];
     let allVipPlans = [];
+    let myUserPlans = [];
     let selectedCoinId = null;
-    let selectedNetworkIndex = 0;
+    let selectedWithdrawMethod = "TRC20-USDT";
     let allAdminDeposits = [];
+    let allAdminWithdraws = [];
     let allAdminUsers = [];
     let adminStatusFilter = "all";
+    let adminWdFilter = "all";
+    let teamMembers = { l1: [], l2: [], l3: [] };
     let isSpinning = false;
     let wheelRotation = 0;
+
+    // Capture ?ref=CODE from URL safely
+    function getStoredRefCode() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlRef = (params.get("ref") || "").trim().toUpperCase();
+        if (urlRef) {
+          localStorage.setItem("nexbitra_ref_code", urlRef);
+          return urlRef;
+        }
+        return (localStorage.getItem("nexbitra_ref_code") || "").trim().toUpperCase();
+      } catch (e) {
+        return "";
+      }
+    }
+
+    const initialRef = getStoredRefCode();
+    if (initialRef) {
+      const regInviteEl = document.getElementById("regInviteCode");
+      if (regInviteEl) regInviteEl.value = initialRef;
+    }
 
     let toastTimer = null;
     function showToast(msg, type = "info") {
@@ -1454,7 +1815,7 @@
       el.textContent = msg;
       el.className = "toast-banner show toast-" + type;
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => el.classList.remove("show"), 4000);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 4200);
     }
 
     function fmtUsdt(num) {
@@ -1487,12 +1848,34 @@
         "auth/email-already-in-use": "Email already registered. Please sign in.",
         "auth/weak-password": "Password must be at least 6 characters.",
         "auth/unauthorized-domain": "Add this domain in Firebase Console → Authentication → Settings → Authorized domains.",
-        "permission-denied": "Firestore permission denied. Publish the latest firestore.rules in Firebase Console."
+        "permission-denied": "Firestore permission denied. Publish updated firestore.rules in Firebase Console."
       };
       return map[code] || err?.message || "Operation failed.";
     }
 
-    // Draw Lucky Spin Wheel on Canvas
+    function coinAvatarClass(symbol) {
+      const s = String(symbol || "").toUpperCase();
+      if (s === "USDT") return "coin-usdt";
+      if (s === "USDC") return "coin-usdc";
+      if (s === "BNB")  return "coin-bnb";
+      if (s === "ETH")  return "coin-eth";
+      if (s === "BTC")  return "coin-btc";
+      if (s === "SOL")  return "coin-sol";
+      return "coin-def";
+    }
+
+    function normalizeChannel(c) {
+      const net = Array.isArray(c.networks) && c.networks[0] ? c.networks[0] : null;
+      const network = c.network || (net && net.name) || "MAIN";
+      const address = c.address || (net && net.address) || "";
+      const qrDataUrl = c.qrDataUrl || (net && net.qrDataUrl) || "";
+      const symbol = (c.symbol || "USDT").toUpperCase();
+      const label = c.name && c.name.includes("-") ? c.name : `${network}-${symbol}`;
+      const subtitle = c.subtitle || (c.name && !c.name.includes("-") ? `${c.name} • ${network}` : `${symbol} • ${network}`);
+      return { ...c, symbol, network, address, qrDataUrl, displayLabel: label, subtitle };
+    }
+
+    // Draw Lucky Spin Wheel
     function drawSpinWheel() {
       const canvas = document.getElementById("spinWheelCanvas");
       if (!canvas) return;
@@ -1533,12 +1916,36 @@
     }
     drawSpinWheel();
 
-    // Ensure User Doc in Firestore
-    async function ensureUserDoc(user) {
+    // Ensure User Doc + $5.00 Signup Bonus + 3-Level Upline Resolution
+    async function ensureUserDoc(user, explicitInviteCode = "") {
       const ref = doc(db, "users", user.uid);
       const snap = await getDoc(ref);
       if (!snap.exists()) {
         const refCode = "NXB" + user.uid.slice(0, 6).toUpperCase();
+        const inviteCode = (explicitInviteCode || getStoredRefCode()).trim().toUpperCase();
+
+        let uplineL1 = "";
+        let uplineL2 = "";
+        let uplineL3 = "";
+        let referredBy = "";
+
+        if (inviteCode && inviteCode !== refCode) {
+          try {
+            const qRef = query(collection(db, "users"), where("referralCode", "==", inviteCode), limit(1));
+            const refSnap = await getDocs(qRef);
+            if (!refSnap.empty) {
+              const parentDoc = refSnap.docs[0];
+              if (parentDoc.id !== user.uid) {
+                const pd = parentDoc.data() || {};
+                referredBy = inviteCode;
+                uplineL1 = parentDoc.id;
+                uplineL2 = pd.uplineL1 || "";
+                uplineL3 = pd.uplineL2 || "";
+              }
+            }
+          } catch (e) {}
+        }
+
         await setDoc(ref, {
           uid: user.uid,
           email: user.email || "",
@@ -1546,9 +1953,12 @@
           username: user.displayName || (user.email ? user.email.split("@")[0] : "NexbitraUser"),
           role: "user",
           tier: "Free",
-          balance: 0,
-          earnings: 0,
+          balance: SIGNUP_BONUS_USDT,
+          earnings: SIGNUP_BONUS_USDT,
+          referralEarnings: 0,
           totalDeposit: 0,
+          totalWithdraw: 0,
+          withdrawPin: "",
           checkInStreak: 0,
           lastCheckInDate: "",
           cumulativeCheckIn: 0,
@@ -1556,12 +1966,28 @@
           todaySpins: 0,
           lastFreeSpinDate: todayUtcStr(),
           referralCode: refCode,
-          createdAt: serverTimestamp()
+          referredBy,
+          uplineL1,
+          uplineL2,
+          uplineL3,
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
         });
+
+        await addDoc(collection(db, "transactions"), {
+          userId: user.uid,
+          type: "signup_bonus",
+          amount: SIGNUP_BONUS_USDT,
+          description: `Welcome Signup Bonus (+${fmtUsdt(SIGNUP_BONUS_USDT)} USDT)`,
+          createdAt: serverTimestamp(),
+          createdAtMs: Date.now()
+        }).catch(() => {});
+
+        showToast(`Welcome! +${fmtUsdt(SIGNUP_BONUS_USDT)} USDT Signup Bonus credited!`, "success");
       }
     }
 
-    async function startUserSession(user) {
+    async function startUserSession(user, explicitInviteCode = "") {
       clearListeners();
       document.body.classList.remove("is-logged-out");
 
@@ -1576,23 +2002,33 @@
       document.getElementById("profileAdminRow").style.display = verifiedAdmin ? "flex" : "none";
 
       try {
-        await ensureUserDoc(user);
+        await ensureUserDoc(user, explicitInviteCode);
       } catch (err) {
         showToast(friendlyError(err), "error");
         return;
       }
 
-      // 1. Live User Profile, Balance, Check-in & Spin State
+      // 1. Live User Profile
       activeUnsubs.push(onSnapshot(doc(db, "users", user.uid), (snap) => {
         const d = snap.data() || {};
         currentUserData = d;
         document.getElementById("homeBalanceValue").textContent = fmtUsdt(d.balance);
         document.getElementById("totalBalanceValue").textContent = fmtUsdt(d.balance);
+        document.getElementById("withdrawAvailBalance").textContent = fmtUsdt(d.balance);
+        document.getElementById("withdrawTotalPaid").textContent = fmtUsdt(d.totalWithdraw || 0);
         document.getElementById("homeDepositValue").textContent = fmtUsdt(d.totalDeposit);
         document.getElementById("totalDepositValue").textContent = fmtUsdt(d.totalDeposit);
         document.getElementById("vipBalancePill").textContent = fmtUsdt(d.balance) + " USDT";
         document.getElementById("homeUserTier").textContent = d.tier || "Free";
         document.getElementById("profileMembershipBadge").textContent = d.tier || "Free";
+        document.getElementById("teamTotalCommission").textContent = "$" + fmtUsdt(d.referralEarnings || 0);
+
+        const pinHint = document.getElementById("withdrawPinHint");
+        if (pinHint) {
+          pinHint.textContent = d.withdrawPin
+            ? "Enter your saved Withdrawal Security Password."
+            : "First-time withdrawal saves this as your Withdrawal Security Password.";
+        }
 
         const code = d.referralCode || ("NXB" + user.uid.slice(0, 6).toUpperCase());
         document.getElementById("refCodeInput").value = code;
@@ -1602,39 +2038,80 @@
         renderSpinUI(d);
       }));
 
-      // 2. Live Coins
+      // 2. Live Deposit Channels
       activeUnsubs.push(onSnapshot(collection(db, "crypto_configs"), (snap) => {
-        allCoins = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (a.symbol || "").localeCompare(b.symbol || ""));
+        allCoins = snap.docs
+          .map((d) => normalizeChannel({ id: d.id, ...d.data() }))
+          .sort((a, b) => (a.displayLabel || "").localeCompare(b.displayLabel || ""));
         renderUserCoins();
         if (verifiedAdmin) renderAdminCoins();
       }));
 
       // 3. Live VIP Plans
       activeUnsubs.push(onSnapshot(collection(db, "vip_plans"), (snap) => {
-        allVipPlans = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+        allVipPlans = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
         renderUserVipPlans();
         if (verifiedAdmin) renderAdminVipPlans();
       }));
 
-      // 4. Live User Deposits
+      // 4. Live User Active VIP Plans
+      const myPlansQ = query(collection(db, "user_plans"), where("userId", "==", user.uid), limit(30));
+      activeUnsubs.push(onSnapshot(myPlansQ, (snap) => {
+        myUserPlans = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
+        renderMyActivePlans();
+      }));
+
+      // 5. Live User Deposits
       const myDepQ = query(collection(db, "deposit_requests"), where("userId", "==", user.uid), limit(30));
       activeUnsubs.push(onSnapshot(myDepQ, (snap) => {
         const list = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
         renderUserDeposits(list);
       }));
 
-      // 5. Live User Transactions
-      const myTxQ = query(collection(db, "transactions"), where("userId", "==", user.uid), limit(50));
+      // 6. Live User Withdrawals
+      const myWdQ = query(collection(db, "withdraw_requests"), where("userId", "==", user.uid), limit(30));
+      activeUnsubs.push(onSnapshot(myWdQ, (snap) => {
+        const list = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
+        renderUserWithdraws(list);
+      }));
+
+      // 7. Live User Transactions
+      const myTxQ = query(collection(db, "transactions"), where("userId", "==", user.uid), limit(60));
       activeUnsubs.push(onSnapshot(myTxQ, (snap) => {
         const list = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
         renderUserLedger(list);
       }));
 
-      // 6. Full Admin Streams (Verified Admin Only)
+      // 8. Live 3-Level Referral Team Streams
+      const l1Q = query(collection(db, "users"), where("uplineL1", "==", user.uid), limit(100));
+      const l2Q = query(collection(db, "users"), where("uplineL2", "==", user.uid), limit(100));
+      const l3Q = query(collection(db, "users"), where("uplineL3", "==", user.uid), limit(100));
+      activeUnsubs.push(onSnapshot(l1Q, (snap) => {
+        teamMembers.l1 = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderTeamDashboard();
+      }, () => {}));
+      activeUnsubs.push(onSnapshot(l2Q, (snap) => {
+        teamMembers.l2 = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderTeamDashboard();
+      }, () => {}));
+      activeUnsubs.push(onSnapshot(l3Q, (snap) => {
+        teamMembers.l3 = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderTeamDashboard();
+      }, () => {}));
+
+      // 9. Full Admin Streams (Verified Admin Only)
       if (verifiedAdmin) {
         activeUnsubs.push(onSnapshot(collection(db, "deposit_requests"), (snap) => {
           allAdminDeposits = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
           renderAdminDeposits();
+        }));
+        activeUnsubs.push(onSnapshot(collection(db, "withdraw_requests"), (snap) => {
+          allAdminWithdraws = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
+          renderAdminWithdraws();
         }));
         activeUnsubs.push(onSnapshot(collection(db, "users"), (snap) => {
           allAdminUsers = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => Number(b.balance || 0) - Number(a.balance || 0));
@@ -1648,7 +2125,61 @@
     }
 
     // =========================================================================
-    // DAILY CHECK-IN (Direct USDT)
+    // 3-LEVEL REFERRAL TEAM DASHBOARD
+    // =========================================================================
+    function renderTeamDashboard() {
+      const l1Dep = teamMembers.l1.reduce((s, u) => s + Number(u.totalDeposit || 0), 0);
+      const l2Dep = teamMembers.l2.reduce((s, u) => s + Number(u.totalDeposit || 0), 0);
+      const l3Dep = teamMembers.l3.reduce((s, u) => s + Number(u.totalDeposit || 0), 0);
+
+      document.getElementById("teamTotalMembers").textContent = String(teamMembers.l1.length + teamMembers.l2.length + teamMembers.l3.length);
+      document.getElementById("teamTotalRecharge").textContent = "$" + fmtUsdt(l1Dep + l2Dep + l3Dep);
+
+      document.getElementById("l1Count").textContent = String(teamMembers.l1.length);
+      document.getElementById("l2Count").textContent = String(teamMembers.l2.length);
+      document.getElementById("l3Count").textContent = String(teamMembers.l3.length);
+      document.getElementById("l1Deposit").textContent = "$" + fmtUsdt(l1Dep) + " Dep";
+      document.getElementById("l2Deposit").textContent = "$" + fmtUsdt(l2Dep) + " Dep";
+      document.getElementById("l3Deposit").textContent = "$" + fmtUsdt(l3Dep) + " Dep";
+
+      const renderLevelList = (list, elId, emptyMsg) => {
+        const box = document.getElementById(elId);
+        if (!box) return;
+        if (!list.length) {
+          box.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">${emptyMsg}</p>`;
+          return;
+        }
+        box.innerHTML = list.map((m) => `
+          <div class="list-item">
+            <div style="min-width:0; flex:1;">
+              <div style="font-weight:700; font-size:13.5px;">${esc(m.username || "Member")} <span class="badge-soft badge-purple">${esc(m.tier || "Free")}</span></div>
+              <div style="font-size:11.5px; color:var(--text-muted); word-break:break-all;">${esc(m.email || m.phone || m.referralCode || "")}</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="tx-amount-pos">$${fmtUsdt(m.totalDeposit || 0)}</div>
+              <div style="font-size:10.5px; color:var(--text-muted);">Deposit</div>
+            </div>
+          </div>
+        `).join("");
+      };
+
+      renderLevelList(teamMembers.l1, "teamL1List", "No Level 1 members yet. Share your link to earn 10% commission!");
+      renderLevelList(teamMembers.l2, "teamL2List", "No Level 2 members yet (5% commission).");
+      renderLevelList(teamMembers.l3, "teamL3List", "No Level 3 members yet (2% commission).");
+    }
+
+    document.querySelectorAll("[data-team-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-team-tab");
+        document.querySelectorAll("[data-team-tab]").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll("#page-team .tab-panel").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(target)?.classList.add("active");
+      });
+    });
+
+    // =========================================================================
+    // DAILY CHECK-IN
     // =========================================================================
     function renderCheckinUI(d) {
       const today = todayUtcStr();
@@ -1742,7 +2273,7 @@
     });
 
     // =========================================================================
-    // LUCKY SPIN WHEEL (Direct USDT)
+    // LUCKY SPIN WHEEL
     // =========================================================================
     function renderSpinUI(d) {
       const today = todayUtcStr();
@@ -1852,27 +2383,106 @@
     });
 
     // =========================================================================
-    // VIP PLANS (User View + Purchase + Admin Posting)
+    // VIP PLANS (Purchase + Active Plans Daily Claim + Admin Post/Edit/Remove)
     // =========================================================================
+    function renderMyActivePlans() {
+      const card = document.getElementById("myActivePlansCard");
+      const box = document.getElementById("myActivePlansList");
+      const active = myUserPlans.filter((p) => p.status === "active");
+      if (!active.length) {
+        card.style.display = "none";
+        return;
+      }
+      card.style.display = "block";
+      document.getElementById("activePlansCount").textContent = `${active.length} Active`;
+      const today = todayUtcStr();
+
+      box.innerHTML = active.map((p) => {
+        const claimedToday = p.lastClaimDate === today;
+        const daysClaimed = Number(p.daysClaimed || 0);
+        const totalDays = Number(p.durationDays || 30);
+        const completed = daysClaimed >= totalDays;
+        return `
+          <div class="list-item">
+            <div style="min-width:0; flex:1;">
+              <div style="font-weight:800; font-size:14px;">${esc(p.planName)}</div>
+              <div style="font-size:12px; color:var(--text-muted);">
+                Daily: <strong style="color:#059669;">+${fmtUsdt(p.dailyReward)} USDT</strong> &bull; Day ${daysClaimed}/${totalDays}
+              </div>
+            </div>
+            <button type="button" class="btn ${claimedToday || completed ? "btn-outline-soft" : "btn-gold"} btn-sm"
+              data-claim-plan="${esc(p.id)}" ${claimedToday || completed ? "disabled" : ""}>
+              ${completed ? "Completed" : (claimedToday ? "Claimed ✓" : "Claim")}
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      box.querySelectorAll("[data-claim-plan]").forEach((btn) => {
+        btn.addEventListener("click", () => claimVipDailyReward(btn.getAttribute("data-claim-plan")));
+      });
+    }
+
+    async function claimVipDailyReward(userPlanId) {
+      const user = auth.currentUser;
+      if (!user) return;
+      const today = todayUtcStr();
+      try {
+        let rewardAmt = 0;
+        await runTransaction(db, async (trx) => {
+          const pRef = doc(db, "user_plans", userPlanId);
+          const uRef = doc(db, "users", user.uid);
+          const [pSnap, uSnap] = await Promise.all([trx.get(pRef), trx.get(uRef)]);
+          const p = pSnap.data();
+          const u = uSnap.data();
+          if (!p || p.userId !== user.uid || p.status !== "active") throw new Error("Plan not active.");
+          if (p.lastClaimDate === today) throw new Error("ALREADY_CLAIMED_TODAY");
+
+          const daysClaimed = Number(p.daysClaimed || 0) + 1;
+          rewardAmt = Number(p.dailyReward || 0);
+          const nextStatus = daysClaimed >= Number(p.durationDays || 30) ? "completed" : "active";
+
+          trx.update(pRef, { lastClaimDate: today, daysClaimed, status: nextStatus });
+          trx.update(uRef, {
+            balance: Number((Number(u.balance || 0) + rewardAmt).toFixed(2)),
+            earnings: Number((Number(u.earnings || 0) + rewardAmt).toFixed(2))
+          });
+          trx.set(doc(collection(db, "transactions")), {
+            userId: user.uid,
+            type: "vip_daily_reward",
+            amount: rewardAmt,
+            description: `${p.planName} Daily Mining Reward (Day ${daysClaimed})`,
+            createdAt: serverTimestamp(),
+            createdAtMs: Date.now()
+          });
+        });
+        showToast(`+${fmtUsdt(rewardAmt)} USDT daily mining reward credited!`, "success");
+      } catch (err) {
+        if (err.message === "ALREADY_CLAIMED_TODAY") showToast("Today's reward already claimed!", "info");
+        else showToast(friendlyError(err), "error");
+      }
+    }
+
     function renderUserVipPlans() {
       const box = document.getElementById("userVipPlansList");
       const active = allVipPlans.filter((p) => p.enabled !== false);
       if (!active.length) {
-        box.innerHTML = '<div class="card"><p style="font-size:13.5px; color:var(--text-muted);">No VIP plans published yet. Admin can post VIP plans from the Admin Panel.</p></div>';
+        box.innerHTML = '<div class="card"><p style="font-size:13.5px; color:var(--text-muted);">No VIP plans published yet. Admin can click <strong>Seed 4 Plans ($5–$50)</strong> or post plans from Admin Panel → VIP Plans.</p></div>';
         return;
       }
 
       box.innerHTML = active.map((p) => {
         const totalReturn = Number(p.dailyReward || 0) * Number(p.durationDays || 30);
-        const prog = Math.min(100, Math.max(0, Number(p.saleProgress || 35)));
+        const prog = Math.min(100, Math.max(0, Number(p.saleProgress || 30)));
+        const isStarter = Number(p.price || 0) <= SIGNUP_BONUS_USDT;
         return `
           <article class="vip-card">
             <div class="vip-card-head">
               <div>
-                <div style="font-size:11px; color:#E9D5FF; font-weight:700;">NEXBITRA / VIP NODE</div>
+                <div style="font-size:11px; color:#E9D5FF; font-weight:700;">${isStarter ? "★ STARTER BONUS ELIGIBLE" : "NEXBITRA / VIP NODE"}</div>
                 <h2 style="font-size:20px; font-weight:800;">${esc(p.name)} <span class="badge-soft badge-amber">${esc(p.badge || "VIP")}</span></h2>
               </div>
-              <button type="button" class="btn btn-gold btn-sm" data-buy-vip="${esc(p.id)}">Buy Plan</button>
+              <button type="button" class="btn btn-gold btn-sm" data-buy-vip="${esc(p.id)}">Buy $${fmtUsdt(p.price)}</button>
             </div>
             <div style="font-size:12.5px; color:rgba(255,255,255,0.8); margin-bottom:10px;">${esc(p.description || "")}</div>
 
@@ -1937,6 +2547,8 @@
             pricePaid: price,
             dailyReward: Number(plan.dailyReward || 0),
             durationDays: Number(plan.durationDays || 30),
+            daysClaimed: 0,
+            lastClaimDate: "",
             status: "active",
             createdAt: serverTimestamp(),
             createdAtMs: Date.now()
@@ -1952,23 +2564,17 @@
           });
         });
 
-        showToast(`${plan.name} activated successfully!`, "success");
+        showToast(`${plan.name} activated! You can now claim daily USDT rewards.`, "success");
       } catch (err) {
         if (err.message === "INSUFFICIENT_USDT") {
-          showToast(`Insufficient USDT balance. Recharge at least ${fmtUsdt(price)} USDT first.`, "error");
+          showToast(`Insufficient USDT balance. Deposit at least ${fmtUsdt(price)} USDT first.`, "error");
         } else {
           showToast(friendlyError(err), "error");
         }
       }
     }
 
-    // Admin VIP Plan Seeding & CRUD
-    const DEFAULT_VIPS = [
-      { id: "vip_node_s", name: "Node S", badge: "V1", price: 12, dailyReward: 0.50, durationDays: 45, saleProgress: 36, description: "Entry-level Nexbitra VIP node with daily USDT release.", enabled: true },
-      { id: "vip_node_1", name: "Node 1", badge: "V2", price: 50, dailyReward: 2.20, durationDays: 60, saleProgress: 52, description: "Enhanced daily USDT release and priority support.", enabled: true },
-      { id: "vip_node_2", name: "Node 2", badge: "V3", price: 200, dailyReward: 9.50, durationDays: 90, saleProgress: 68, description: "Premium Nexbitra VIP tier with maximum daily USDT output.", enabled: true }
-    ];
-
+    // Admin VIP Plan Seeding & Post / Edit / Remove
     document.getElementById("seedVipPlansBtn")?.addEventListener("click", async () => {
       if (!isVerifiedAdmin(auth.currentUser)) { showToast("Verified Admin access required.", "error"); return; }
       try {
@@ -1976,9 +2582,9 @@
           await setDoc(doc(db, "vip_plans", v.id), { ...v, updatedAt: serverTimestamp() }, { merge: true });
         }
         await addDoc(collection(db, "audit_logs"), {
-          adminEmail: auth.currentUser.email, action: "SEED_VIP_PLANS", details: "Seeded 3 default VIP plans", createdAt: serverTimestamp(), createdAtMs: Date.now()
+          adminEmail: auth.currentUser.email, action: "SEED_VIP_PLANS", details: "Seeded 4 low-cost VIP plans ($5–$50)", createdAt: serverTimestamp(), createdAtMs: Date.now()
         });
-        showToast("3 default VIP plans posted!", "success");
+        showToast("4 low-cost VIP plans ($5–$50) posted!", "success");
       } catch (err) { showToast(friendlyError(err), "error"); }
     });
 
@@ -2005,7 +2611,7 @@
         await addDoc(collection(db, "audit_logs"), {
           adminEmail: auth.currentUser.email,
           action: editId ? "EDIT_VIP_PLAN" : "POST_VIP_PLAN",
-          details: `${name} (${badge}) — ${fmtUsdt(price)} USDT, +${fmtUsdt(dailyReward)}/day`,
+          details: `${name} (${badge}) — $${fmtUsdt(price)} USDT, +$${fmtUsdt(dailyReward)}/day`,
           createdAt: serverTimestamp(),
           createdAtMs: Date.now()
         });
@@ -2014,7 +2620,7 @@
         document.getElementById("editVipId").value = "";
         document.getElementById("cancelEditVipBtn").style.display = "none";
         document.getElementById("vipFormHeading").textContent = "Post New VIP Plan";
-        showToast(`VIP Plan "${name}" published!`, "success");
+        showToast(`VIP Plan "${name}" saved!`, "success");
       } catch (err) { showToast(friendlyError(err), "error"); }
     });
 
@@ -2038,12 +2644,12 @@
             <span class="badge-soft ${p.enabled !== false ? "badge-green" : "badge-red"}">${p.enabled !== false ? "Live" : "Hidden"}</span>
           </div>
           <div style="font-size:12px; color:var(--text-muted); margin:4px 0;">
-            Price: <strong>${fmtUsdt(p.price)} USDT</strong> &bull; Daily: <strong>+${fmtUsdt(p.dailyReward)} USDT</strong> &bull; ${Number(p.durationDays)} Days
+            Price: <strong>$${fmtUsdt(p.price)} USDT</strong> &bull; Daily: <strong>+$${fmtUsdt(p.dailyReward)} USDT</strong> &bull; ${Number(p.durationDays)} Days
           </div>
           <div style="display:flex; gap:6px; margin-top:6px;">
             <button type="button" class="btn btn-outline-soft btn-sm" data-edit-vip="${esc(p.id)}">Edit</button>
             <button type="button" class="btn btn-outline-soft btn-sm" data-toggle-vip="${esc(p.id)}">${p.enabled !== false ? "Hide" : "Show"}</button>
-            <button type="button" class="btn btn-danger btn-sm" data-del-vip="${esc(p.id)}">Delete</button>
+            <button type="button" class="btn btn-danger btn-sm" data-del-vip="${esc(p.id)}">Remove</button>
           </div>
         </div>
       `).join("");
@@ -2055,14 +2661,15 @@
           document.getElementById("editVipId").value = p.id;
           document.getElementById("vipNameInput").value = p.name || "";
           document.getElementById("vipBadgeInput").value = p.badge || "";
-          document.getElementById("vipPriceInput").value = p.price ?? 10;
-          document.getElementById("vipDailyInput").value = p.dailyReward ?? 0.5;
+          document.getElementById("vipPriceInput").value = p.price ?? 5;
+          document.getElementById("vipDailyInput").value = p.dailyReward ?? 0.4;
           document.getElementById("vipDaysInput").value = p.durationDays ?? 30;
-          document.getElementById("vipProgressInput").value = p.saleProgress ?? 35;
+          document.getElementById("vipProgressInput").value = p.saleProgress ?? 30;
           document.getElementById("vipDescInput").value = p.description || "";
           document.getElementById("vipEnabledInput").checked = p.enabled !== false;
           document.getElementById("vipFormHeading").textContent = "Editing " + p.name;
           document.getElementById("cancelEditVipBtn").style.display = "inline-flex";
+          document.getElementById("adminVipForm").scrollIntoView({ behavior: "smooth", block: "nearest" });
         });
       });
 
@@ -2077,14 +2684,629 @@
 
       box.querySelectorAll("[data-del-vip]").forEach((btn) => {
         btn.addEventListener("click", async () => {
-          await deleteDoc(doc(db, "vip_plans", btn.getAttribute("data-del-vip")));
-          showToast("VIP plan deleted.", "info");
+          const id = btn.getAttribute("data-del-vip");
+          const p = allVipPlans.find((x) => x.id === id);
+          await deleteDoc(doc(db, "vip_plans", id));
+          await addDoc(collection(db, "audit_logs"), {
+            adminEmail: auth.currentUser.email, action: "REMOVE_VIP_PLAN",
+            details: `Removed VIP Plan: ${p?.name || id}`, createdAt: serverTimestamp(), createdAtMs: Date.now()
+          }).catch(() => {});
+          showToast("VIP plan removed.", "info");
         });
       });
     }
 
     // =========================================================================
-    // ADMIN FULL USER MANAGEMENT (Adjust USDT Balance & Grant Lucky Spins)
+    // DEPOSIT CHANNELS LIST (BEP20-USDT, TRC20-USDT, POLYGON-USDT, USDC, BNB, ETH)
+    // =========================================================================
+    function renderUserCoins() {
+      const box = document.getElementById("userCoinSelector");
+      const wrap = document.getElementById("rechargeDetailsWrap");
+      const enabled = allCoins.filter((c) => c.enabled !== false);
+      document.getElementById("depositChannelCount").textContent = `${enabled.length} Channels`;
+
+      if (!enabled.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No deposit channels enabled yet. Admin can click <strong>Seed 6 Channels</strong> in Admin Panel → Coins &amp; QR.</p>';
+        wrap.style.display = "none";
+        return;
+      }
+
+      if (!selectedCoinId || !enabled.some((c) => c.id === selectedCoinId)) {
+        selectedCoinId = enabled[0].id;
+      }
+
+      box.innerHTML = enabled.map((c) => {
+        const isActive = c.id === selectedCoinId;
+        return `
+          <button type="button" class="channel-row ${isActive ? "active" : ""}" data-select-coin="${esc(c.id)}">
+            <span class="channel-left">
+              <span class="coin-avatar ${coinAvatarClass(c.symbol)}">${esc(c.symbol.slice(0, 4))}</span>
+              <span>
+                <div class="channel-title">${esc(c.displayLabel)}</div>
+                <div class="channel-sub">${esc(c.subtitle)} &bull; Min $${fmtUsdt(c.minDeposit)}</div>
+              </span>
+            </span>
+            <span class="channel-radio" aria-hidden="true"></span>
+          </button>
+        `;
+      }).join("");
+
+      box.querySelectorAll("[data-select-coin]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectedCoinId = btn.getAttribute("data-select-coin");
+          renderUserCoins();
+          wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      });
+
+      const ch = enabled.find((c) => c.id === selectedCoinId);
+      if (!ch) return;
+      wrap.style.display = "block";
+
+      document.getElementById("selectedChannelHeading").textContent = ch.displayLabel;
+      document.getElementById("selectedChannelBadge").textContent = ch.network;
+      document.getElementById("warnCoin").textContent = ch.symbol;
+      document.getElementById("warnNetwork").textContent = ch.network;
+      document.getElementById("addrNetworkLabel").textContent = ch.displayLabel;
+      document.getElementById("depositWalletAddr").value = ch.address || "";
+      document.getElementById("coinLimitsText").textContent = `Min ${fmtUsdt(ch.minDeposit)} — Max ${fmtUsdt(ch.maxDeposit)} USDT`;
+
+      const qrBox = document.getElementById("userQrContainer");
+      qrBox.innerHTML = "";
+      if (ch.qrDataUrl) {
+        const img = document.createElement("img");
+        img.src = ch.qrDataUrl;
+        img.alt = `${ch.displayLabel} QR`;
+        qrBox.appendChild(img);
+      } else if (ch.address && window.QRCode) {
+        new window.QRCode(qrBox, { text: ch.address, width: 156, height: 156, colorDark: "#2E1065", colorLight: "#FFFFFF" });
+      }
+    }
+
+    function renderUserDeposits(list) {
+      document.getElementById("myDepositCount").textContent = String(list.length);
+      const html = !list.length
+        ? '<p style="font-size:13px; color:var(--text-muted);">No deposit requests submitted yet.</p>'
+        : list.map((d) => {
+            const badge = d.status === "approved" ? "badge-green" : (d.status === "rejected" ? "badge-red" : "badge-amber");
+            return `
+              <div class="list-item" style="align-items:flex-start;">
+                <div style="min-width:0; flex:1;">
+                  <div style="font-weight:700; font-size:13.5px;">${esc(d.network)}-${esc(d.coinSymbol)}</div>
+                  <div style="font-size:11.5px; color:var(--text-muted); word-break:break-all;">TXID: ${esc(d.txid)}</div>
+                  ${d.adminNote ? `<div style="font-size:11.5px; color:var(--purple-800);">Note: ${esc(d.adminNote)}</div>` : ""}
+                </div>
+                <div style="text-align:right;">
+                  <div class="tx-amount-pos">${fmtUsdt(d.amount)} USDT</div>
+                  <span class="badge-soft ${badge}">${esc(d.status.toUpperCase())}</span>
+                </div>
+              </div>
+            `;
+          }).join("");
+
+      document.getElementById("userDepositList").innerHTML = html;
+      document.getElementById("homeRecentDeposits").innerHTML = html;
+    }
+
+    document.getElementById("cryptoDepositForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) return;
+      const ch = allCoins.find((c) => c.id === selectedCoinId && c.enabled !== false);
+      if (!ch) return;
+      const amount = Number(document.getElementById("depositAmountInput").value);
+      const txid = document.getElementById("depositTxidInput").value.trim();
+      const txidKey = txid.toLowerCase().replace(/[^a-z0-9]/g, "_").slice(0, 120);
+
+      if (isNaN(amount) || amount < Number(ch.minDeposit || 5) || amount > Number(ch.maxDeposit || 1000000)) {
+        showToast(`Amount must be between ${fmtUsdt(ch.minDeposit)} and ${fmtUsdt(ch.maxDeposit)} USDT.`, "error");
+        return;
+      }
+
+      const btn = document.getElementById("submitDepositBtn");
+      btn.disabled = true;
+      try {
+        await runTransaction(db, async (trx) => {
+          const regRef = doc(db, "txid_registry", txidKey);
+          if ((await trx.get(regRef)).exists()) throw new Error("DUPLICATE_TXID");
+          const reqRef = doc(collection(db, "deposit_requests"));
+          trx.set(regRef, { txid, userId: user.uid, requestId: reqRef.id, createdAtMs: Date.now() });
+          trx.set(reqRef, {
+            userId: user.uid, userEmail: user.email || user.phoneNumber || "",
+            coinId: ch.id, coinSymbol: ch.symbol, network: ch.network,
+            destinationAddress: ch.address, amount, txid, txidKey, status: "pending",
+            createdAt: serverTimestamp(), createdAtMs: Date.now()
+          });
+        });
+        e.target.reset();
+        showToast("Deposit request submitted! Awaiting Admin verification.", "success");
+      } catch (err) {
+        showToast(err.message === "DUPLICATE_TXID" ? "Duplicate TXID blocked." : friendlyError(err), "error");
+      } finally { btn.disabled = false; }
+    });
+
+    // =========================================================================
+    // WITHDRAWAL SYSTEM (User Form + History + Admin Approve / Reject Refund)
+    // =========================================================================
+    function updateWithdrawPreview() {
+      const amt = Number(document.getElementById("withdrawAmountInput")?.value || 0);
+      const fee = amt > 0 ? Number((amt * WITHDRAW_FEE_RATE).toFixed(2)) : 0;
+      const net = amt > 0 ? Math.max(0, Number((amt - fee).toFixed(2))) : 0;
+      document.getElementById("withdrawFeePreview").textContent = `${fmtUsdt(fee)} USDT`;
+      document.getElementById("withdrawNetPreview").textContent = `${fmtUsdt(net)} USDT`;
+    }
+
+    document.getElementById("withdrawAmountInput")?.addEventListener("input", updateWithdrawPreview);
+
+    document.getElementById("withdrawAllBtn")?.addEventListener("click", () => {
+      const bal = Number(currentUserData?.balance || 0);
+      document.getElementById("withdrawAmountInput").value = bal > 0 ? bal.toFixed(2) : "";
+      updateWithdrawPreview();
+    });
+
+    document.querySelectorAll("[data-wd-method]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedWithdrawMethod = btn.getAttribute("data-wd-method");
+        document.querySelectorAll("[data-wd-method]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("withdrawMethodLabel").textContent = selectedWithdrawMethod;
+      });
+    });
+
+    document.getElementById("withdrawForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const amount = Number(document.getElementById("withdrawAmountInput").value);
+      const walletAddress = document.getElementById("withdrawAddressInput").value.trim();
+      const secPassword = document.getElementById("withdrawPasswordInput").value.trim();
+
+      if (isNaN(amount) || amount < MIN_WITHDRAW_USDT) {
+        showToast(`Minimum withdrawal amount is ${fmtUsdt(MIN_WITHDRAW_USDT)} USDT.`, "error");
+        return;
+      }
+      if (walletAddress.length < 16) {
+        showToast("Please enter a valid receiving wallet address.", "error");
+        return;
+      }
+      if (secPassword.length < 6) {
+        showToast("Security password must be at least 6 characters.", "error");
+        return;
+      }
+
+      const fee = Number((amount * WITHDRAW_FEE_RATE).toFixed(2));
+      const netAmount = Number((amount - fee).toFixed(2));
+      const btn = document.getElementById("submitWithdrawBtn");
+      btn.disabled = true;
+
+      try {
+        await runTransaction(db, async (trx) => {
+          const uRef = doc(db, "users", user.uid);
+          const snap = await trx.get(uRef);
+          const d = snap.data() || {};
+          if (d.withdrawPin && d.withdrawPin !== secPassword) throw new Error("WRONG_WD_PIN");
+          if (Number(d.balance || 0) < amount) throw new Error("INSUFFICIENT_BALANCE");
+
+          const updates = {
+            balance: Number((Number(d.balance || 0) - amount).toFixed(2))
+          };
+          if (!d.withdrawPin) updates.withdrawPin = secPassword;
+          trx.update(uRef, updates);
+
+          const wdRef = doc(collection(db, "withdraw_requests"));
+          trx.set(wdRef, {
+            userId: user.uid,
+            userEmail: user.email || user.phoneNumber || "",
+            method: selectedWithdrawMethod,
+            walletAddress,
+            amount,
+            fee,
+            netAmount,
+            status: "pending",
+            createdAt: serverTimestamp(),
+            createdAtMs: Date.now()
+          });
+
+          trx.set(doc(collection(db, "transactions")), {
+            userId: user.uid,
+            type: "withdraw_request",
+            amount: -amount,
+            description: `Withdraw Request (${selectedWithdrawMethod})`,
+            createdAt: serverTimestamp(),
+            createdAtMs: Date.now()
+          });
+        });
+
+        e.target.reset();
+        updateWithdrawPreview();
+        showToast("Withdrawal request submitted! Awaiting Admin payout.", "success");
+      } catch (err) {
+        if (err.message === "WRONG_WD_PIN") showToast("Incorrect Withdrawal Security Password.", "error");
+        else if (err.message === "INSUFFICIENT_BALANCE") showToast("Insufficient USDT balance.", "error");
+        else showToast(friendlyError(err), "error");
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function renderUserWithdraws(list) {
+      document.getElementById("myWithdrawCount").textContent = String(list.length);
+      const box = document.getElementById("userWithdrawList");
+      if (!list.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No withdrawal requests yet.</p>';
+        return;
+      }
+      box.innerHTML = list.map((w) => {
+        const badge = w.status === "approved" ? "badge-green" : (w.status === "rejected" ? "badge-red" : "badge-amber");
+        return `
+          <div class="list-item" style="align-items:flex-start;">
+            <div style="min-width:0; flex:1;">
+              <div style="font-weight:700; font-size:13.5px;">${esc(w.method)}</div>
+              <div style="font-size:11.5px; color:var(--text-muted); word-break:break-all;">To: ${esc(w.walletAddress)}</div>
+              <div style="font-size:11px; color:var(--text-muted);">Net: ${fmtUsdt(w.netAmount)} USDT (Fee ${fmtUsdt(w.fee)})</div>
+              ${w.adminNote ? `<div style="font-size:11.5px; color:var(--purple-800);">Note: ${esc(w.adminNote)}</div>` : ""}
+            </div>
+            <div style="text-align:right;">
+              <div class="tx-amount-neg">-${fmtUsdt(w.amount)} USDT</div>
+              <span class="badge-soft ${badge}">${esc(w.status.toUpperCase())}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderUserLedger(list) {
+      const box = document.getElementById("userTxLedger");
+      if (!list.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No transactions recorded yet.</p>';
+        return;
+      }
+      box.innerHTML = list.map((tx) => {
+        const isPos = Number(tx.amount) >= 0;
+        return `
+          <div class="list-item">
+            <div style="min-width:0; flex:1;">
+              <div style="font-weight:700; font-size:13.5px;">${esc(tx.description)}</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">${new Date(tx.createdAtMs || Date.now()).toLocaleString()}</div>
+            </div>
+            <div class="${isPos ? "tx-amount-pos" : "tx-amount-neg"}">${isPos ? "+" : ""}${fmtUsdt(tx.amount)} USDT</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // ADMIN: COINS & QR CHANNELS
+    // =========================================================================
+    document.getElementById("seedDefaultCoinsBtn")?.addEventListener("click", async () => {
+      if (!isVerifiedAdmin(auth.currentUser)) return;
+      try {
+        for (const c of DEFAULT_CHANNELS) {
+          await setDoc(doc(db, "crypto_configs", c.id), { ...c, updatedAt: serverTimestamp() }, { merge: true });
+        }
+        await addDoc(collection(db, "audit_logs"), {
+          adminEmail: auth.currentUser.email, action: "SEED_CHANNELS", details: "Seeded 6 deposit channels", createdAt: serverTimestamp(), createdAtMs: Date.now()
+        }).catch(() => {});
+        showToast("6 deposit channels initialized!", "success");
+      } catch (err) { showToast(friendlyError(err), "error"); }
+    });
+
+    document.getElementById("coinQrUpload")?.addEventListener("change", (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = 240; canvas.height = 240;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, 240, 240);
+          ctx.drawImage(img, 0, 0, 240, 240);
+          document.getElementById("coinQrDataUrl").value = canvas.toDataURL("image/png", 0.85);
+          showToast("QR image ready!", "success");
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("adminCoinForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!isVerifiedAdmin(auth.currentUser)) return;
+      const editId = document.getElementById("editCoinId").value.trim();
+      const symbol = document.getElementById("coinSymbolInput").value.trim().toUpperCase();
+      const network = document.getElementById("coinNetworkInput").value.trim().toUpperCase();
+      const name = document.getElementById("coinNameInput").value.trim();
+      const subtitle = document.getElementById("coinSubInput").value.trim() || `${symbol} • ${network}`;
+      const minDeposit = Number(document.getElementById("coinMinInput").value);
+      const maxDeposit = Number(document.getElementById("coinMaxInput").value);
+      const address = document.getElementById("coinAddressInput").value.trim();
+      const qrDataUrl = document.getElementById("coinQrDataUrl").value.trim();
+      const enabled = document.getElementById("coinEnabledInput").checked;
+      const coinId = editId || `${network.toLowerCase()}_${symbol.toLowerCase()}_${Date.now().toString(36).slice(-3)}`.replace(/[^a-z0-9_]/g, "");
+
+      try {
+        await setDoc(doc(db, "crypto_configs", coinId), {
+          symbol, network, name, subtitle, minDeposit, maxDeposit, address, qrDataUrl, enabled,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        e.target.reset();
+        document.getElementById("editCoinId").value = "";
+        document.getElementById("coinQrDataUrl").value = "";
+        document.getElementById("cancelEditCoinBtn").style.display = "none";
+        document.getElementById("coinFormHeading").textContent = "Add / Edit Deposit Channel";
+        showToast(`${name} saved!`, "success");
+      } catch (err) { showToast(friendlyError(err), "error"); }
+    });
+
+    document.getElementById("cancelEditCoinBtn")?.addEventListener("click", () => {
+      document.getElementById("adminCoinForm").reset();
+      document.getElementById("editCoinId").value = "";
+      document.getElementById("coinQrDataUrl").value = "";
+      document.getElementById("cancelEditCoinBtn").style.display = "none";
+      document.getElementById("coinFormHeading").textContent = "Add / Edit Deposit Channel";
+    });
+
+    function renderAdminCoins() {
+      const box = document.getElementById("adminCoinsList");
+      if (!allCoins.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No channels configured yet.</p>';
+        return;
+      }
+      box.innerHTML = allCoins.map((c) => `
+        <div class="list-item" style="display:block;">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>${esc(c.displayLabel)}</strong>
+            <span class="badge-soft ${c.enabled !== false ? "badge-green" : "badge-red"}">${c.enabled !== false ? "Enabled" : "Disabled"}</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); word-break:break-all;">${esc(c.address)}</div>
+          <div style="display:flex; gap:6px; margin-top:6px;">
+            <button type="button" class="btn btn-outline-soft btn-sm" data-edit-coin="${esc(c.id)}">Edit</button>
+            <button type="button" class="btn btn-outline-soft btn-sm" data-toggle-coin="${esc(c.id)}">${c.enabled !== false ? "Disable" : "Enable"}</button>
+            <button type="button" class="btn btn-danger btn-sm" data-delete-coin="${esc(c.id)}">Remove</button>
+          </div>
+        </div>
+      `).join("");
+
+      box.querySelectorAll("[data-edit-coin]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const c = allCoins.find((x) => x.id === btn.getAttribute("data-edit-coin"));
+          if (!c) return;
+          document.getElementById("editCoinId").value = c.id;
+          document.getElementById("coinSymbolInput").value = c.symbol || "";
+          document.getElementById("coinNetworkInput").value = c.network || "";
+          document.getElementById("coinNameInput").value = c.displayLabel || "";
+          document.getElementById("coinSubInput").value = c.subtitle || "";
+          document.getElementById("coinMinInput").value = c.minDeposit ?? 5;
+          document.getElementById("coinMaxInput").value = c.maxDeposit ?? 50000;
+          document.getElementById("coinAddressInput").value = c.address || "";
+          document.getElementById("coinQrDataUrl").value = c.qrDataUrl || "";
+          document.getElementById("coinEnabledInput").checked = c.enabled !== false;
+          document.getElementById("coinFormHeading").textContent = "Editing " + c.displayLabel;
+          document.getElementById("cancelEditCoinBtn").style.display = "inline-flex";
+        });
+      });
+      box.querySelectorAll("[data-toggle-coin]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const c = allCoins.find((x) => x.id === btn.getAttribute("data-toggle-coin"));
+          if (c) await updateDoc(doc(db, "crypto_configs", c.id), { enabled: !(c.enabled !== false) });
+        });
+      });
+      box.querySelectorAll("[data-delete-coin]").forEach((btn) => {
+        btn.addEventListener("click", async () => { await deleteDoc(doc(db, "crypto_configs", btn.getAttribute("data-delete-coin"))); showToast("Channel removed.", "info"); });
+      });
+    }
+
+    // =========================================================================
+    // ADMIN: DEPOSIT APPROVALS (+ AUTOMATIC 3-LEVEL REFERRAL COMMISSIONS)
+    // =========================================================================
+    function renderAdminDeposits() {
+      const q = (document.getElementById("adminTxidSearch")?.value || "").trim().toLowerCase();
+      const filtered = allAdminDeposits.filter((d) => {
+        if (adminStatusFilter !== "all" && d.status !== adminStatusFilter) return false;
+        if (q && !(String(d.txid || "").toLowerCase().includes(q) || String(d.userEmail || "").toLowerCase().includes(q))) return false;
+        return true;
+      });
+      const box = document.getElementById("adminDepositList");
+      if (!filtered.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No matching deposits.</p>';
+        return;
+      }
+
+      box.innerHTML = filtered.map((d) => {
+        const badge = d.status === "approved" ? "badge-green" : (d.status === "rejected" ? "badge-red" : "badge-amber");
+        const isPending = d.status === "pending";
+        return `
+          <div style="border:1px solid var(--border-light); border-radius:14px; padding:13px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong>${fmtUsdt(d.amount)} USDT via ${esc(d.network)}-${esc(d.coinSymbol)}</strong>
+              <span class="badge-soft ${badge}">${esc(d.status.toUpperCase())}</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); word-break:break-all;">
+              User: <strong>${esc(d.userEmail)}</strong><br>TXID: <code>${esc(d.txid)}</code>
+            </div>
+            ${isPending ? `
+              <div class="verify-checklist" data-checklist="${esc(d.id)}">
+                <label><input type="checkbox" class="v-chk"> Verified network (${esc(d.network)}) &amp; destination address</label>
+                <label><input type="checkbox" class="v-chk"> Verified exact amount &amp; confirmations on explorer</label>
+              </div>
+              <input type="text" class="form-control" style="margin-bottom:8px; padding:8px; font-size:12.5px;" id="note_${esc(d.id)}" placeholder="Verification note / reason">
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="btn btn-success btn-sm" data-approve-dep="${esc(d.id)}">Approve &amp; Credit USDT</button>
+                <button type="button" class="btn btn-danger btn-sm" data-reject-dep="${esc(d.id)}">Reject</button>
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("");
+
+      box.querySelectorAll("[data-approve-dep]").forEach((b) => b.addEventListener("click", () => handleDepositDecision(b.getAttribute("data-approve-dep"), "approved")));
+      box.querySelectorAll("[data-reject-dep]").forEach((b) => b.addEventListener("click", () => handleDepositDecision(b.getAttribute("data-reject-dep"), "rejected")));
+    }
+
+    async function handleDepositDecision(reqId, decision) {
+      if (!isVerifiedAdmin(auth.currentUser)) return;
+      if (decision === "approved") {
+        const checks = document.querySelectorAll(`[data-checklist="${reqId}"] .v-chk`);
+        if (!Array.from(checks).every((c) => c.checked)) {
+          showToast("Check both verification boxes before approving!", "error");
+          return;
+        }
+      }
+      const note = (document.getElementById("note_" + reqId)?.value || "").trim();
+      try {
+        let uplinesToCredit = [];
+        await runTransaction(db, async (trx) => {
+          const depRef = doc(db, "deposit_requests", reqId);
+          const depSnap = await trx.get(depRef);
+          const dep = depSnap.data();
+          if (!dep || dep.status !== "pending") throw new Error("Already processed.");
+          const uRef = doc(db, "users", dep.userId);
+          const uSnap = await trx.get(uRef);
+          trx.update(depRef, { status: decision, adminNote: note, reviewedBy: auth.currentUser.email, reviewedAt: serverTimestamp() });
+          if (decision === "approved" && uSnap.exists()) {
+            const u = uSnap.data();
+            const depAmt = Number(dep.amount);
+            trx.update(uRef, {
+              balance: Number((Number(u.balance || 0) + depAmt).toFixed(2)),
+              totalDeposit: Number((Number(u.totalDeposit || 0) + depAmt).toFixed(2))
+            });
+            trx.set(doc(collection(db, "transactions")), {
+              userId: dep.userId, type: "crypto_deposit", amount: depAmt,
+              description: `Approved ${dep.network}-${dep.coinSymbol} Deposit`, txid: dep.txid,
+              createdAt: serverTimestamp(), createdAtMs: Date.now()
+            });
+            if (u.uplineL1) uplinesToCredit.push({ uid: u.uplineL1, level: 1, rate: REF_RATES.l1, amount: Number((depAmt * REF_RATES.l1).toFixed(2)), from: dep.userEmail });
+            if (u.uplineL2) uplinesToCredit.push({ uid: u.uplineL2, level: 2, rate: REF_RATES.l2, amount: Number((depAmt * REF_RATES.l2).toFixed(2)), from: dep.userEmail });
+            if (u.uplineL3) uplinesToCredit.push({ uid: u.uplineL3, level: 3, rate: REF_RATES.l3, amount: Number((depAmt * REF_RATES.l3).toFixed(2)), from: dep.userEmail });
+          }
+          trx.set(doc(collection(db, "audit_logs")), {
+            adminEmail: auth.currentUser.email, action: decision === "approved" ? "DEPOSIT_APPROVED" : "DEPOSIT_REJECTED",
+            details: `${decision.toUpperCase()} ${fmtUsdt(dep.amount)} USDT for ${dep.userEmail} (TXID: ${dep.txid})`,
+            createdAt: serverTimestamp(), createdAtMs: Date.now()
+          });
+        });
+
+        // Credit 3-level referral commissions
+        for (const up of uplinesToCredit) {
+          if (up.amount <= 0) continue;
+          await runTransaction(db, async (trx) => {
+            const ref = doc(db, "users", up.uid);
+            const snap = await trx.get(ref);
+            if (!snap.exists()) return;
+            const ud = snap.data() || {};
+            trx.update(ref, {
+              balance: Number((Number(ud.balance || 0) + up.amount).toFixed(2)),
+              referralEarnings: Number((Number(ud.referralEarnings || 0) + up.amount).toFixed(2))
+            });
+            trx.set(doc(collection(db, "transactions")), {
+              userId: up.uid,
+              type: "referral_commission",
+              amount: up.amount,
+              description: `Level ${up.level} (${Math.round(up.rate * 100)}%) Referral Commission`,
+              createdAt: serverTimestamp(),
+              createdAtMs: Date.now()
+            });
+          }).catch(() => {});
+        }
+
+        showToast(decision === "approved" ? "Deposit approved & USDT credited!" : "Deposit rejected.", "success");
+      } catch (err) { showToast(friendlyError(err), "error"); }
+    }
+
+    // =========================================================================
+    // ADMIN: WITHDRAW APPROVALS & REFUNDS
+    // =========================================================================
+    function renderAdminWithdraws() {
+      const q = (document.getElementById("adminWdSearch")?.value || "").trim().toLowerCase();
+      const filtered = allAdminWithdraws.filter((w) => {
+        if (adminWdFilter !== "all" && w.status !== adminWdFilter) return false;
+        if (q && !(String(w.userEmail || "").toLowerCase().includes(q) || String(w.walletAddress || "").toLowerCase().includes(q))) return false;
+        return true;
+      });
+      const box = document.getElementById("adminWithdrawList");
+      if (!filtered.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No matching withdrawal requests.</p>';
+        return;
+      }
+
+      box.innerHTML = filtered.map((w) => {
+        const badge = w.status === "approved" ? "badge-green" : (w.status === "rejected" ? "badge-red" : "badge-amber");
+        const isPending = w.status === "pending";
+        return `
+          <div style="border:1px solid var(--border-light); border-radius:14px; padding:13px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong>${fmtUsdt(w.amount)} USDT (${esc(w.method)})</strong>
+              <span class="badge-soft ${badge}">${esc(w.status.toUpperCase())}</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); word-break:break-all; margin:4px 0;">
+              User: <strong>${esc(w.userEmail)}</strong><br>
+              Net Payout: <strong style="color:#059669;">${fmtUsdt(w.netAmount)} USDT</strong> (Fee ${fmtUsdt(w.fee)})<br>
+              Wallet: <code>${esc(w.walletAddress)}</code>
+            </div>
+            ${isPending ? `
+              <input type="text" class="form-control" style="margin:8px 0; padding:8px; font-size:12.5px;" id="wdnote_${esc(w.id)}" placeholder="Payout TXID or rejection reason">
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn btn-success btn-sm" data-approve-wd="${esc(w.id)}">Approve &amp; Mark Paid</button>
+                <button type="button" class="btn btn-danger btn-sm" data-reject-wd="${esc(w.id)}">Reject &amp; Refund</button>
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("");
+
+      box.querySelectorAll("[data-approve-wd]").forEach((b) => b.addEventListener("click", () => handleWithdrawDecision(b.getAttribute("data-approve-wd"), "approved")));
+      box.querySelectorAll("[data-reject-wd]").forEach((b) => b.addEventListener("click", () => handleWithdrawDecision(b.getAttribute("data-reject-wd"), "rejected")));
+    }
+
+    async function handleWithdrawDecision(reqId, decision) {
+      if (!isVerifiedAdmin(auth.currentUser)) return;
+      const note = (document.getElementById("wdnote_" + reqId)?.value || "").trim();
+      try {
+        await runTransaction(db, async (trx) => {
+          const wdRef = doc(db, "withdraw_requests", reqId);
+          const wdSnap = await trx.get(wdRef);
+          const wd = wdSnap.data();
+          if (!wd || wd.status !== "pending") throw new Error("Already processed.");
+          const uRef = doc(db, "users", wd.userId);
+          const uSnap = await trx.get(uRef);
+          trx.update(wdRef, { status: decision, adminNote: note, reviewedBy: auth.currentUser.email, reviewedAt: serverTimestamp() });
+          if (uSnap.exists()) {
+            const u = uSnap.data() || {};
+            if (decision === "approved") {
+              trx.update(uRef, {
+                totalWithdraw: Number((Number(u.totalWithdraw || 0) + Number(wd.amount)).toFixed(2))
+              });
+            } else if (decision === "rejected") {
+              trx.update(uRef, {
+                balance: Number((Number(u.balance || 0) + Number(wd.amount)).toFixed(2))
+              });
+              trx.set(doc(collection(db, "transactions")), {
+                userId: wd.userId,
+                type: "withdraw_refund",
+                amount: Number(wd.amount),
+                description: `Withdrawal Rejected & Refunded (${wd.method})`,
+                createdAt: serverTimestamp(),
+                createdAtMs: Date.now()
+              });
+            }
+          }
+          trx.set(doc(collection(db, "audit_logs")), {
+            adminEmail: auth.currentUser.email,
+            action: decision === "approved" ? "WITHDRAW_APPROVED" : "WITHDRAW_REJECTED",
+            details: `${decision.toUpperCase()} ${fmtUsdt(wd.amount)} USDT for ${wd.userEmail} (${wd.method})`,
+            createdAt: serverTimestamp(),
+            createdAtMs: Date.now()
+          });
+        });
+        showToast(decision === "approved" ? "Withdrawal marked as paid!" : "Withdrawal rejected & refunded.", "success");
+      } catch (err) { showToast(friendlyError(err), "error"); }
+    }
+
+    // =========================================================================
+    // ADMIN: USERS & AUDIT LOGS
     // =========================================================================
     function renderAdminUsers() {
       const q = (document.getElementById("adminUserSearch")?.value || "").trim().toLowerCase();
@@ -2155,366 +3377,6 @@
         });
       });
     }
-    document.getElementById("adminUserSearch")?.addEventListener("input", renderAdminUsers);
-
-    // =========================================================================
-    // CRYPTO RECHARGE & DEPOSIT APPROVAL ENGINE
-    // =========================================================================
-    function renderUserCoins() {
-      const box = document.getElementById("userCoinSelector");
-      const wrap = document.getElementById("rechargeDetailsWrap");
-      const enabled = allCoins.filter((c) => c.enabled !== false);
-
-      if (!enabled.length) {
-        box.innerHTML = '<div style="grid-column:1/-1; font-size:13px; color:var(--text-muted);">No cryptocurrencies enabled yet. Admin can seed coins from Admin Panel → Coins &amp; QR.</div>';
-        wrap.style.display = "none";
-        return;
-      }
-
-      if (!selectedCoinId || !enabled.some((c) => c.id === selectedCoinId)) {
-        selectedCoinId = enabled[0].id;
-        selectedNetworkIndex = 0;
-      }
-
-      box.innerHTML = enabled.map((c) => `
-        <button type="button" class="coin-pill ${c.id === selectedCoinId ? "active" : ""}" data-select-coin="${esc(c.id)}">
-          ${esc(c.symbol)}<div style="font-size:10.5px; font-weight:500; color:var(--text-muted);">${esc(c.name)}</div>
-        </button>
-      `).join("");
-
-      box.querySelectorAll("[data-select-coin]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          selectedCoinId = btn.getAttribute("data-select-coin");
-          selectedNetworkIndex = 0;
-          renderUserCoins();
-        });
-      });
-
-      const coin = enabled.find((c) => c.id === selectedCoinId);
-      if (!coin) return;
-      wrap.style.display = "block";
-
-      const networks = Array.isArray(coin.networks) && coin.networks.length
-        ? coin.networks
-        : [{ name: coin.network || "Main", address: coin.address || "", qrDataUrl: coin.qrDataUrl || "" }];
-
-      if (selectedNetworkIndex >= networks.length) selectedNetworkIndex = 0;
-      const net = networks[selectedNetworkIndex];
-
-      const netBox = document.getElementById("userNetworkSelector");
-      netBox.innerHTML = networks.map((n, idx) => `
-        <button type="button" class="net-pill ${idx === selectedNetworkIndex ? "active" : ""}" data-select-net="${idx}">${esc(n.name)}</button>
-      `).join("");
-      netBox.querySelectorAll("[data-select-net]").forEach((btn) => {
-        btn.addEventListener("click", () => { selectedNetworkIndex = Number(btn.getAttribute("data-select-net")); renderUserCoins(); });
-      });
-
-      document.getElementById("warnCoin").textContent = coin.symbol;
-      document.getElementById("warnNetwork").textContent = net.name;
-      document.getElementById("addrNetworkLabel").textContent = `${coin.symbol} • ${net.name}`;
-      document.getElementById("depositWalletAddr").value = net.address || "";
-      document.getElementById("coinLimitsText").textContent = `Min ${fmtUsdt(coin.minDeposit)} — Max ${fmtUsdt(coin.maxDeposit)} USDT`;
-
-      const qrBox = document.getElementById("userQrContainer");
-      qrBox.innerHTML = "";
-      if (net.qrDataUrl) {
-        const img = document.createElement("img");
-        img.src = net.qrDataUrl;
-        img.alt = `${coin.symbol} QR`;
-        qrBox.appendChild(img);
-      } else if (net.address && window.QRCode) {
-        new window.QRCode(qrBox, { text: net.address, width: 156, height: 156, colorDark: "#2E1065", colorLight: "#FFFFFF" });
-      }
-    }
-
-    function renderUserDeposits(list) {
-      document.getElementById("myDepositCount").textContent = String(list.length);
-      const html = !list.length
-        ? '<p style="font-size:13px; color:var(--text-muted);">No deposit requests submitted yet.</p>'
-        : list.map((d) => {
-            const badge = d.status === "approved" ? "badge-green" : (d.status === "rejected" ? "badge-red" : "badge-amber");
-            return `
-              <div class="list-item" style="align-items:flex-start;">
-                <div style="min-width:0; flex:1;">
-                  <div style="font-weight:700; font-size:13.5px;">${esc(d.coinSymbol)} (${esc(d.network)})</div>
-                  <div style="font-size:11.5px; color:var(--text-muted); word-break:break-all;">TXID: ${esc(d.txid)}</div>
-                  ${d.adminNote ? `<div style="font-size:11.5px; color:var(--purple-800);">Note: ${esc(d.adminNote)}</div>` : ""}
-                </div>
-                <div style="text-align:right;">
-                  <div class="tx-amount-pos">${fmtUsdt(d.amount)} USDT</div>
-                  <span class="badge-soft ${badge}">${esc(d.status.toUpperCase())}</span>
-                </div>
-              </div>
-            `;
-          }).join("");
-
-      document.getElementById("userDepositList").innerHTML = html;
-      document.getElementById("homeRecentDeposits").innerHTML = html;
-    }
-
-    function renderUserLedger(list) {
-      const box = document.getElementById("userTxLedger");
-      if (!list.length) {
-        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No transactions recorded yet.</p>';
-        return;
-      }
-      box.innerHTML = list.map((tx) => {
-        const isPos = Number(tx.amount) >= 0;
-        return `
-          <div class="list-item">
-            <div style="min-width:0; flex:1;">
-              <div style="font-weight:700; font-size:13.5px;">${esc(tx.description)}</div>
-              <div style="font-size:11.5px; color:var(--text-muted);">${new Date(tx.createdAtMs || Date.now()).toLocaleString()}</div>
-            </div>
-            <div class="${isPos ? "tx-amount-pos" : "tx-amount-neg"}">${isPos ? "+" : ""}${fmtUsdt(tx.amount)} USDT</div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    document.getElementById("cryptoDepositForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) return;
-      const coin = allCoins.find((c) => c.id === selectedCoinId && c.enabled !== false);
-      if (!coin) return;
-      const networks = Array.isArray(coin.networks) && coin.networks.length ? coin.networks : [{ name: coin.network || "", address: coin.address || "" }];
-      const net = networks[selectedNetworkIndex] || networks[0];
-      const amount = Number(document.getElementById("depositAmountInput").value);
-      const txid = document.getElementById("depositTxidInput").value.trim();
-      const txidKey = txid.toLowerCase().replace(/[^a-z0-9]/g, "_").slice(0, 120);
-
-      if (isNaN(amount) || amount < Number(coin.minDeposit || 1) || amount > Number(coin.maxDeposit || 1000000)) {
-        showToast(`Amount must be between ${fmtUsdt(coin.minDeposit)} and ${fmtUsdt(coin.maxDeposit)} USDT.`, "error");
-        return;
-      }
-
-      const btn = document.getElementById("submitDepositBtn");
-      btn.disabled = true;
-      try {
-        await runTransaction(db, async (trx) => {
-          const regRef = doc(db, "txid_registry", txidKey);
-          if ((await trx.get(regRef)).exists()) throw new Error("DUPLICATE_TXID");
-          const reqRef = doc(collection(db, "deposit_requests"));
-          trx.set(regRef, { txid, userId: user.uid, requestId: reqRef.id, createdAtMs: Date.now() });
-          trx.set(reqRef, {
-            userId: user.uid, userEmail: user.email || user.phoneNumber || "",
-            coinId: coin.id, coinSymbol: coin.symbol, network: net.name,
-            destinationAddress: net.address, amount, txid, txidKey, status: "pending",
-            createdAt: serverTimestamp(), createdAtMs: Date.now()
-          });
-        });
-        e.target.reset();
-        showToast("Deposit request submitted! Awaiting Admin verification.", "success");
-      } catch (err) {
-        showToast(err.message === "DUPLICATE_TXID" ? "Duplicate TXID blocked." : friendlyError(err), "error");
-      } finally { btn.disabled = false; }
-    });
-
-    const DEFAULT_COINS = [
-      { id: "usdt", symbol: "USDT", name: "Tether USD", minDeposit: 10, maxDeposit: 50000, enabled: true, networks: [{ name: "TRC20", address: "TReplaceWithYourTRC20WalletAddress01", qrDataUrl: "" }, { name: "BEP20", address: "0xReplaceWithYourBEP20WalletAddress01", qrDataUrl: "" }] },
-      { id: "bnb",  symbol: "BNB",  name: "BNB Smart Chain", minDeposit: 10, maxDeposit: 50000, enabled: true, networks: [{ name: "BEP20", address: "0xReplaceWithYourBNBWalletAddress02", qrDataUrl: "" }] },
-      { id: "usdc", symbol: "USDC", name: "USD Coin", minDeposit: 10, maxDeposit: 50000, enabled: true, networks: [{ name: "ERC20", address: "0xReplaceWithYourUSDCWalletAddress03", qrDataUrl: "" }] },
-      { id: "eth",  symbol: "ETH",  name: "Ethereum", minDeposit: 10, maxDeposit: 50000, enabled: true, networks: [{ name: "ERC20", address: "0xReplaceWithYourETHWalletAddress04", qrDataUrl: "" }] },
-      { id: "btc",  symbol: "BTC",  name: "Bitcoin", minDeposit: 15, maxDeposit: 100000, enabled: true, networks: [{ name: "Bitcoin", address: "bc1qreplacewithyourbtcwalletaddress05", qrDataUrl: "" }] },
-      { id: "sol",  symbol: "SOL",  name: "Solana", minDeposit: 10, maxDeposit: 50000, enabled: true, networks: [{ name: "Solana", address: "So1ReplaceWithYourSolanaAddress00006", qrDataUrl: "" }] }
-    ];
-
-    document.getElementById("seedDefaultCoinsBtn")?.addEventListener("click", async () => {
-      if (!isVerifiedAdmin(auth.currentUser)) return;
-      try {
-        for (const c of DEFAULT_COINS) {
-          await setDoc(doc(db, "crypto_configs", c.id), { ...c, updatedAt: serverTimestamp() }, { merge: true });
-        }
-        showToast("6 cryptocurrencies initialized!", "success");
-      } catch (err) { showToast(friendlyError(err), "error"); }
-    });
-
-    document.getElementById("coinQrUpload")?.addEventListener("change", (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = 240; canvas.height = 240;
-          const ctx = canvas.getContext("2d");
-          ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, 240, 240);
-          ctx.drawImage(img, 0, 0, 240, 240);
-          document.getElementById("coinQrDataUrl").value = canvas.toDataURL("image/png", 0.85);
-          showToast("QR image ready!", "success");
-        };
-        img.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-
-    document.getElementById("adminCoinForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!isVerifiedAdmin(auth.currentUser)) return;
-      const editId = document.getElementById("editCoinId").value.trim();
-      const symbol = document.getElementById("coinSymbolInput").value.trim().toUpperCase();
-      const name = document.getElementById("coinNameInput").value.trim();
-      const minDeposit = Number(document.getElementById("coinMinInput").value);
-      const maxDeposit = Number(document.getElementById("coinMaxInput").value);
-      const networkName = document.getElementById("coinNetworkInput").value.trim();
-      const address = document.getElementById("coinAddressInput").value.trim();
-      const qrDataUrl = document.getElementById("coinQrDataUrl").value.trim();
-      const enabled = document.getElementById("coinEnabledInput").checked;
-      const coinId = editId || symbol.toLowerCase().replace(/[^a-z0-9]/g, "") + "_" + Date.now().toString(36).slice(-3);
-
-      try {
-        await setDoc(doc(db, "crypto_configs", coinId), {
-          symbol, name, minDeposit, maxDeposit, enabled,
-          networks: [{ name: networkName, address, qrDataUrl }], updatedAt: serverTimestamp()
-        }, { merge: true });
-        e.target.reset();
-        document.getElementById("editCoinId").value = "";
-        document.getElementById("coinQrDataUrl").value = "";
-        document.getElementById("cancelEditCoinBtn").style.display = "none";
-        showToast(`${symbol} saved!`, "success");
-      } catch (err) { showToast(friendlyError(err), "error"); }
-    });
-
-    document.getElementById("cancelEditCoinBtn")?.addEventListener("click", () => {
-      document.getElementById("adminCoinForm").reset();
-      document.getElementById("editCoinId").value = "";
-      document.getElementById("cancelEditCoinBtn").style.display = "none";
-    });
-
-    function renderAdminCoins() {
-      const box = document.getElementById("adminCoinsList");
-      box.innerHTML = allCoins.map((c) => {
-        const net = (Array.isArray(c.networks) && c.networks[0]) ? c.networks[0] : { name: "—", address: "—" };
-        return `
-          <div class="list-item" style="display:block;">
-            <div style="display:flex; justify-content:space-between;">
-              <strong>${esc(c.symbol)} — ${esc(c.name)}</strong>
-              <span class="badge-soft ${c.enabled !== false ? "badge-green" : "badge-red"}">${c.enabled !== false ? "Enabled" : "Disabled"}</span>
-            </div>
-            <div style="font-size:12px; color:var(--text-muted); word-break:break-all;">${esc(net.name)} &bull; ${esc(net.address)}</div>
-            <div style="display:flex; gap:6px; margin-top:6px;">
-              <button type="button" class="btn btn-outline-soft btn-sm" data-edit-coin="${esc(c.id)}">Edit</button>
-              <button type="button" class="btn btn-outline-soft btn-sm" data-toggle-coin="${esc(c.id)}">${c.enabled !== false ? "Disable" : "Enable"}</button>
-              <button type="button" class="btn btn-danger btn-sm" data-delete-coin="${esc(c.id)}">Delete</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      box.querySelectorAll("[data-edit-coin]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const c = allCoins.find((x) => x.id === btn.getAttribute("data-edit-coin"));
-          if (!c) return;
-          const net = (Array.isArray(c.networks) && c.networks[0]) ? c.networks[0] : {};
-          document.getElementById("editCoinId").value = c.id;
-          document.getElementById("coinSymbolInput").value = c.symbol || "";
-          document.getElementById("coinNameInput").value = c.name || "";
-          document.getElementById("coinMinInput").value = c.minDeposit ?? 10;
-          document.getElementById("coinMaxInput").value = c.maxDeposit ?? 50000;
-          document.getElementById("coinNetworkInput").value = net.name || "";
-          document.getElementById("coinAddressInput").value = net.address || "";
-          document.getElementById("coinQrDataUrl").value = net.qrDataUrl || "";
-          document.getElementById("coinEnabledInput").checked = c.enabled !== false;
-          document.getElementById("cancelEditCoinBtn").style.display = "inline-flex";
-        });
-      });
-      box.querySelectorAll("[data-toggle-coin]").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const c = allCoins.find((x) => x.id === btn.getAttribute("data-toggle-coin"));
-          if (c) await updateDoc(doc(db, "crypto_configs", c.id), { enabled: !(c.enabled !== false) });
-        });
-      });
-      box.querySelectorAll("[data-delete-coin]").forEach((btn) => {
-        btn.addEventListener("click", async () => { await deleteDoc(doc(db, "crypto_configs", btn.getAttribute("data-delete-coin"))); });
-      });
-    }
-
-    function renderAdminDeposits() {
-      const q = (document.getElementById("adminTxidSearch")?.value || "").trim().toLowerCase();
-      const filtered = allAdminDeposits.filter((d) => {
-        if (adminStatusFilter !== "all" && d.status !== adminStatusFilter) return false;
-        if (q && !(String(d.txid || "").toLowerCase().includes(q) || String(d.userEmail || "").toLowerCase().includes(q))) return false;
-        return true;
-      });
-      const box = document.getElementById("adminDepositList");
-      if (!filtered.length) {
-        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No matching deposits.</p>';
-        return;
-      }
-
-      box.innerHTML = filtered.map((d) => {
-        const badge = d.status === "approved" ? "badge-green" : (d.status === "rejected" ? "badge-red" : "badge-amber");
-        const isPending = d.status === "pending";
-        return `
-          <div style="border:1px solid var(--border-light); border-radius:14px; padding:13px; margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <strong>${fmtUsdt(d.amount)} USDT via ${esc(d.coinSymbol)} (${esc(d.network)})</strong>
-              <span class="badge-soft ${badge}">${esc(d.status.toUpperCase())}</span>
-            </div>
-            <div style="font-size:12px; color:var(--text-muted); word-break:break-all;">
-              User: <strong>${esc(d.userEmail)}</strong><br>TXID: <code>${esc(d.txid)}</code>
-            </div>
-            ${isPending ? `
-              <div class="verify-checklist" data-checklist="${esc(d.id)}">
-                <label><input type="checkbox" class="v-chk"> Verified network (${esc(d.network)}) &amp; destination address</label>
-                <label><input type="checkbox" class="v-chk"> Verified exact amount &amp; confirmations on explorer</label>
-              </div>
-              <input type="text" class="form-control" style="margin-bottom:8px; padding:8px; font-size:12.5px;" id="note_${esc(d.id)}" placeholder="Verification note / reason">
-              <div style="display:flex; gap:8px;">
-                <button type="button" class="btn btn-success btn-sm" data-approve-dep="${esc(d.id)}">Approve &amp; Credit USDT</button>
-                <button type="button" class="btn btn-danger btn-sm" data-reject-dep="${esc(d.id)}">Reject</button>
-              </div>
-            ` : ""}
-          </div>
-        `;
-      }).join("");
-
-      box.querySelectorAll("[data-approve-dep]").forEach((b) => b.addEventListener("click", () => handleDepositDecision(b.getAttribute("data-approve-dep"), "approved")));
-      box.querySelectorAll("[data-reject-dep]").forEach((b) => b.addEventListener("click", () => handleDepositDecision(b.getAttribute("data-reject-dep"), "rejected")));
-    }
-
-    async function handleDepositDecision(reqId, decision) {
-      if (!isVerifiedAdmin(auth.currentUser)) return;
-      if (decision === "approved") {
-        const checks = document.querySelectorAll(`[data-checklist="${reqId}"] .v-chk`);
-        if (!Array.from(checks).every((c) => c.checked)) {
-          showToast("Check both verification boxes before approving!", "error");
-          return;
-        }
-      }
-      const note = (document.getElementById("note_" + reqId)?.value || "").trim();
-      try {
-        await runTransaction(db, async (trx) => {
-          const depRef = doc(db, "deposit_requests", reqId);
-          const depSnap = await trx.get(depRef);
-          const dep = depSnap.data();
-          if (!dep || dep.status !== "pending") throw new Error("Already processed.");
-          const uRef = doc(db, "users", dep.userId);
-          const uSnap = await trx.get(uRef);
-          trx.update(depRef, { status: decision, adminNote: note, reviewedBy: auth.currentUser.email, reviewedAt: serverTimestamp() });
-          if (decision === "approved" && uSnap.exists()) {
-            const u = uSnap.data();
-            trx.update(uRef, {
-              balance: Number((Number(u.balance || 0) + Number(dep.amount)).toFixed(2)),
-              totalDeposit: Number((Number(u.totalDeposit || 0) + Number(dep.amount)).toFixed(2))
-            });
-            trx.set(doc(collection(db, "transactions")), {
-              userId: dep.userId, type: "crypto_deposit", amount: Number(dep.amount),
-              description: `Approved ${dep.coinSymbol} (${dep.network}) Deposit`, txid: dep.txid,
-              createdAt: serverTimestamp(), createdAtMs: Date.now()
-            });
-          }
-          trx.set(doc(collection(db, "audit_logs")), {
-            adminEmail: auth.currentUser.email, action: decision === "approved" ? "DEPOSIT_APPROVED" : "DEPOSIT_REJECTED",
-            details: `${decision.toUpperCase()} ${fmtUsdt(dep.amount)} USDT for ${dep.userEmail} (TXID: ${dep.txid})`,
-            createdAt: serverTimestamp(), createdAtMs: Date.now()
-          });
-        });
-        showToast(decision === "approved" ? "Deposit approved & USDT credited!" : "Deposit rejected.", "success");
-      } catch (err) { showToast(friendlyError(err), "error"); }
-    }
 
     function renderAdminAuditLogs(logs) {
       const box = document.getElementById("adminAuditList");
@@ -2527,12 +3389,24 @@
     }
 
     document.getElementById("adminTxidSearch")?.addEventListener("input", renderAdminDeposits);
+    document.getElementById("adminWdSearch")?.addEventListener("input", renderAdminWithdraws);
+    document.getElementById("adminUserSearch")?.addEventListener("input", renderAdminUsers);
+
     document.querySelectorAll("[data-status-filter]").forEach((btn) => {
       btn.addEventListener("click", () => {
         adminStatusFilter = btn.getAttribute("data-status-filter");
         document.querySelectorAll("[data-status-filter]").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         renderAdminDeposits();
+      });
+    });
+
+    document.querySelectorAll("[data-wd-filter]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        adminWdFilter = btn.getAttribute("data-wd-filter");
+        document.querySelectorAll("[data-wd-filter]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderAdminWithdraws();
       });
     });
 
@@ -2590,12 +3464,16 @@
       e.preventDefault();
       const pw = document.getElementById("regPassword").value;
       if (pw !== document.getElementById("regConfirm").value) { showToast("Passwords do not match.", "error"); return; }
+      const inviteCode = document.getElementById("regInviteCode").value.trim().toUpperCase();
+      if (inviteCode) {
+        try { localStorage.setItem("nexbitra_ref_code", inviteCode); } catch (err) {}
+      }
       try {
         const cred = await createUserWithEmailAndPassword(auth, document.getElementById("regEmail").value.trim(), pw);
         await updateProfile(cred.user, { displayName: document.getElementById("regUsername").value.trim() });
+        await ensureUserDoc(cred.user, inviteCode);
         await sendEmailVerification(cred.user).catch(() => {});
         document.getElementById("route-home").checked = true;
-        showToast("Account created!", "success");
         e.target.reset();
       } catch (err) { showToast(friendlyError(err), "error"); }
     });
@@ -2635,9 +3513,15 @@
       e.preventDefault();
       const user = auth.currentUser;
       if (!user || !user.email) return;
+      const newPw = document.getElementById("newPassword").value;
+      const confirmPw = document.getElementById("confirmPassword").value;
+      if (newPw !== confirmPw) {
+        showToast("New passwords do not match.", "error");
+        return;
+      }
       try {
         await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, document.getElementById("currentPassword").value));
-        await updatePassword(user, document.getElementById("newPassword").value);
+        await updatePassword(user, newPw);
         e.target.reset();
         showToast("Password updated!", "success");
       } catch (err) { showToast(friendlyError(err), "error"); }
